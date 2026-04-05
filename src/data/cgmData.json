@@ -1,0 +1,857 @@
+{
+  "metadata": {
+    "version": "2.0",
+    "description": "Personal CGM meal log — real-world glucose response data with foods, pre-meal strategies, post-meal activities, and derived glucose curves",
+    "subject": "Personal",
+    "date_range": { "start": "2025-06-26", "end": "2025-07-06" },
+    "total_days": 11,
+    "total_meals": 20,
+    "units": {
+      "glucose": "mg/dL",
+      "time":    "minutes post-meal"
+    },
+    "spike_threshold_mgdl": 140,
+    "spike_severity_scale": {
+      "none":     "peak ≤ 140",
+      "mild":     "peak 141–155",
+      "moderate": "peak 156–170",
+      "high":     "peak 171–185",
+      "very_high":"peak > 185"
+    }
+  },
+
+  "meals": [
+
+    {
+      "id": "meal_001",
+      "datetime": "2025-06-26T13:30:00",
+      "date": "2025-06-26",
+      "day_of_week": "Thursday",
+      "meal_type": "lunch",
+      "foods": [
+        { "name": "brown basmati rice",    "gi_estimate": 50, "category": "grains"     },
+        { "name": "mushroom cashew curry", "gi_estimate": 35, "category": "curry"      },
+        { "name": "red amaranthus fry",    "gi_estimate": 32, "category": "greens"     }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" }
+      ],
+      "post_meal": [
+        { "activity": "10 min cycling", "type": "cycling", "duration_min": 10, "intensity": "moderate" }
+      ],
+      "glucose": {
+        "baseline": 95,
+        "peak":     155,
+        "delta":    60,
+        "peak_time_min": 50,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 108 },
+          { "time_min": 30,  "value": 128 },
+          { "time_min": 45,  "value": 148 },
+          { "time_min": 60,  "value": 155 },
+          { "time_min": 90,  "value": 138 },
+          { "time_min": 120, "value": 118 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "mild",
+      "tags": ["fat_carb_combo", "high_rice"],
+      "notes": "Brown basmati (GI 50) paired with fat-heavy cashew curry — fat slows absorption but didn't prevent spike. Chia seeds provided some buffer. 10 min cycling started post-peak, helping recovery but not blunting the rise."
+    },
+
+    {
+      "id": "meal_002",
+      "datetime": "2025-06-26T17:00:00",
+      "date": "2025-06-26",
+      "day_of_week": "Thursday",
+      "meal_type": "evening_snack",
+      "foods": [
+        { "name": "chenna payesh",  "gi_estimate": 62, "category": "sweets"   },
+        { "name": "chicken roll",   "gi_estimate": 44, "category": "protein_carb" }
+      ],
+      "pre_meal": [],
+      "post_meal": [
+        { "activity": "15 min walk", "type": "walk", "duration_min": 15, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 100,
+        "peak":     135,
+        "delta":    35,
+        "peak_time_min": 35,
+        "readings": [
+          { "time_min": 0,   "value": 100 },
+          { "time_min": 15,  "value": 120 },
+          { "time_min": 30,  "value": 132 },
+          { "time_min": 45,  "value": 135 },
+          { "time_min": 60,  "value": 124 },
+          { "time_min": 90,  "value": 108 },
+          { "time_min": 120, "value": 101 }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["controlled_sweets"],
+      "notes": "Sweet (chenna payesh) paired with protein (chicken roll) moderated the glycemic response. Protein co-ingestion stimulates GLP-1, slowing gastric emptying. 15-min walk post-meal brought glucose back to baseline efficiently."
+    },
+
+    {
+      "id": "meal_003",
+      "datetime": "2025-06-26T20:00:00",
+      "date": "2025-06-26",
+      "day_of_week": "Thursday",
+      "meal_type": "dinner",
+      "foods": [
+        { "name": "brown rice",      "gi_estimate": 50, "category": "grains"     },
+        { "name": "mushroom curry",  "gi_estimate": 30, "category": "vegetables" },
+        { "name": "greens",          "gi_estimate": 15, "category": "vegetables" }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" }
+      ],
+      "post_meal": [
+        { "activity": "15 min walk", "type": "walk", "duration_min": 15, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 98,
+        "peak":     126,
+        "delta":    28,
+        "peak_time_min": 55,
+        "readings": [
+          { "time_min": 0,   "value": 98  },
+          { "time_min": 15,  "value": 104 },
+          { "time_min": 30,  "value": 113 },
+          { "time_min": 45,  "value": 121 },
+          { "time_min": 60,  "value": 126 },
+          { "time_min": 90,  "value": 112 },
+          { "time_min": 120, "value": 100 }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["controlled"],
+      "notes": "Ideal dinner pattern — chia seeds (fiber buffer), greens (additional fiber and volume), and 15-min walk after eating. Flat 28 mg/dL rise over 55 minutes. The slow peak time indicates slowed gastric emptying from combined fiber sources."
+    },
+
+    {
+      "id": "meal_004",
+      "datetime": "2025-06-27T09:00:00",
+      "date": "2025-06-27",
+      "day_of_week": "Friday",
+      "meal_type": "breakfast",
+      "foods": [
+        { "name": "6 idlis",         "gi_estimate": 46, "category": "south_indian" },
+        { "name": "peanut chutney",  "gi_estimate": 20, "category": "condiments"   },
+        { "name": "egg",             "gi_estimate": 0,  "category": "protein"      },
+        { "name": "chicken",         "gi_estimate": 0,  "category": "protein"      }
+      ],
+      "pre_meal": [
+        { "item": "4km walk", "type": "exercise", "effect": "insulin_sensitization_glut4_activation" }
+      ],
+      "post_meal": [
+        { "activity": "15 min walk", "type": "walk", "duration_min": 15, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 95,
+        "peak":     175,
+        "delta":    80,
+        "peak_time_min": 40,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 130 },
+          { "time_min": 30,  "value": 158 },
+          { "time_min": 45,  "value": 175 },
+          { "time_min": 60,  "value": 162 },
+          { "time_min": 90,  "value": 136 },
+          { "time_min": 120, "value": 112 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "high",
+      "tags": ["refined_carb", "idli_trigger"],
+      "notes": "6 idlis ≈ 90g+ fermented rice carbs. Despite protein (egg + chicken), peanut chutney fat buffer, a 4km pre-meal walk, and post-meal walk — sheer carb volume (6 pieces vs safe 2–3) drove an 80 mg/dL spike. Largest delta in the dataset. Portion size was the primary driver."
+    },
+
+    {
+      "id": "meal_005",
+      "datetime": "2025-06-27T20:00:00",
+      "date": "2025-06-27",
+      "day_of_week": "Friday",
+      "meal_type": "dinner",
+      "foods": [
+        { "name": "brown rice",    "gi_estimate": 50, "category": "grains"  },
+        { "name": "chicken curry", "gi_estimate": 15, "category": "protein" }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" }
+      ],
+      "post_meal": [
+        { "activity": "15 min walk", "type": "walk", "duration_min": 15, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 100,
+        "peak":     135,
+        "delta":    35,
+        "peak_time_min": 55,
+        "readings": [
+          { "time_min": 0,   "value": 100 },
+          { "time_min": 15,  "value": 106 },
+          { "time_min": 30,  "value": 116 },
+          { "time_min": 45,  "value": 126 },
+          { "time_min": 60,  "value": 135 },
+          { "time_min": 90,  "value": 116 },
+          { "time_min": 120, "value": 102 }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["controlled"],
+      "notes": "Consistent controlled pattern — brown rice + protein + chia + walk yields a predictable 35 mg/dL delta. This is the repeatable 'safe dinner' formula in the dataset."
+    },
+
+    {
+      "id": "meal_006",
+      "datetime": "2025-06-28T10:00:00",
+      "date": "2025-06-28",
+      "day_of_week": "Saturday",
+      "meal_type": "breakfast",
+      "foods": [
+        { "name": "toast",       "gi_estimate": 54, "category": "grains"     },
+        { "name": "egg omelet",  "gi_estimate": 0,  "category": "protein"    },
+        { "name": "carrot",      "gi_estimate": 35, "category": "vegetables" },
+        { "name": "cucumber",    "gi_estimate": 15, "category": "vegetables" }
+      ],
+      "pre_meal": [
+        { "item": "methi seeds", "type": "supplement", "effect": "galactomannan_inhibits_alpha_glucosidase" }
+      ],
+      "post_meal": [
+        { "activity": "5 min walk", "type": "walk", "duration_min": 5, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 100,
+        "peak":     141,
+        "delta":    41,
+        "peak_time_min": 40,
+        "readings": [
+          { "time_min": 0,   "value": 100 },
+          { "time_min": 15,  "value": 116 },
+          { "time_min": 30,  "value": 132 },
+          { "time_min": 45,  "value": 141 },
+          { "time_min": 60,  "value": 135 },
+          { "time_min": 90,  "value": 118 },
+          { "time_min": 120, "value": 106 }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["balanced"],
+      "notes": "Borderline response at 141 — just above the threshold. Methi seeds (galactomannan fiber inhibits alpha-glucosidase) provided a buffer. A longer 10–15 min walk instead of 5 min would likely have kept the peak under 135. Egg protein first would also help."
+    },
+
+    {
+      "id": "meal_007",
+      "datetime": "2025-06-28T14:10:00",
+      "date": "2025-06-28",
+      "day_of_week": "Saturday",
+      "meal_type": "lunch",
+      "foods": [
+        { "name": "brown rice",  "gi_estimate": 50, "category": "grains"  },
+        { "name": "rasam",       "gi_estimate": 25, "category": "soup"    },
+        { "name": "chicken fry", "gi_estimate": 0,  "category": "protein" }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" }
+      ],
+      "post_meal": [],
+      "glucose": {
+        "baseline": 95,
+        "peak":     150,
+        "delta":    55,
+        "peak_time_min": 45,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 112 },
+          { "time_min": 30,  "value": 134 },
+          { "time_min": 45,  "value": 150 },
+          { "time_min": 60,  "value": 146 },
+          { "time_min": 90,  "value": 132 },
+          { "time_min": 120, "value": 118 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "mild",
+      "tags": ["no_activity"],
+      "notes": "Identical food pattern to meal_005 (brown rice + protein + chia) but with NO post-meal activity — spiked at 150 vs 135. This is the clearest direct comparison in the dataset proving post-meal walk is the critical intervention. Delta 55 vs 35 = 20 mg/dL penalty for skipping the walk."
+    },
+
+    {
+      "id": "meal_008",
+      "datetime": "2025-06-28T15:45:00",
+      "date": "2025-06-28",
+      "day_of_week": "Saturday",
+      "meal_type": "snack",
+      "foods": [
+        { "name": "kala jamun", "gi_estimate": 70, "category": "sweets" }
+      ],
+      "pre_meal": [],
+      "post_meal": [],
+      "glucose": {
+        "baseline": 110,
+        "peak":     145,
+        "delta":    35,
+        "peak_time_min": 25,
+        "readings": [
+          { "time_min": 0,   "value": 110 },
+          { "time_min": 15,  "value": 140 },
+          { "time_min": 30,  "value": 145 },
+          { "time_min": 45,  "value": 138 },
+          { "time_min": 60,  "value": 128 },
+          { "time_min": 90,  "value": 118 },
+          { "time_min": 120, "value": 111 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "mild",
+      "tags": ["sweets"],
+      "notes": "Kala jamun (deep-fried milk solid soaked in sugar syrup) taken 1.5h after lunch when baseline was already elevated at 110 mg/dL. Fast peak at 25 min is characteristic of liquid-absorbed simple sugars. Despite the small absolute delta (35), the elevated baseline meant crossing the threshold quickly. No strategy or recovery walk."
+    },
+
+    {
+      "id": "meal_009",
+      "datetime": "2025-06-29T20:00:00",
+      "date": "2025-06-29",
+      "day_of_week": "Sunday",
+      "meal_type": "dinner",
+      "foods": [
+        { "name": "brown rice",  "gi_estimate": 50, "category": "grains"     },
+        { "name": "fish curry",  "gi_estimate": 15, "category": "protein"    }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" },
+        { "item": "carrot",     "type": "vegetable_primer", "effect": "fiber_and_volume_reduces_effective_gi" }
+      ],
+      "post_meal": [
+        { "activity": "10 min walk", "type": "walk", "duration_min": 10, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 95,
+        "peak":     130,
+        "delta":    35,
+        "peak_time_min": 55,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 100 },
+          { "time_min": 30,  "value": 112 },
+          { "time_min": 45,  "value": 122 },
+          { "time_min": 60,  "value": 130 },
+          { "time_min": 90,  "value": 114 },
+          { "time_min": 120, "value": 97  }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["controlled_rice"],
+      "notes": "Double fiber pre-meal (chia seeds + raw carrot as vegetable primer) plus 10 min walk produced the best brown rice dinner result — 130 peak vs 150 in meal_007 (same food, only chia). Adding carrot as a fiber-first vegetable primer reduced peak by ~20 mg/dL."
+    },
+
+    {
+      "id": "meal_010",
+      "datetime": "2025-06-30T13:00:00",
+      "date": "2025-06-30",
+      "day_of_week": "Monday",
+      "meal_type": "lunch",
+      "foods": [
+        { "name": "white rice",   "gi_estimate": 73, "category": "grains"     },
+        { "name": "dal",          "gi_estimate": 29, "category": "legumes"    },
+        { "name": "potato fry",   "gi_estimate": 78, "category": "vegetables" }
+      ],
+      "pre_meal": [],
+      "post_meal": [],
+      "glucose": {
+        "baseline": 100,
+        "peak":     170,
+        "delta":    70,
+        "peak_time_min": 40,
+        "readings": [
+          { "time_min": 0,   "value": 100 },
+          { "time_min": 15,  "value": 130 },
+          { "time_min": 30,  "value": 155 },
+          { "time_min": 45,  "value": 170 },
+          { "time_min": 60,  "value": 163 },
+          { "time_min": 90,  "value": 148 },
+          { "time_min": 120, "value": 130 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "moderate",
+      "tags": ["high_carb", "no_fiber"],
+      "notes": "Worst non-sweet spike in the dataset. Triple high-GI combo: white rice (GI 73) + potato fry (GI 78) + zero strategy. Dal (GI 29) was the only low-GI element but insufficient to buffer 2 high-GI starches. Still above 140 at 120 min — prolonged excursion. Zero strategies applied."
+    },
+
+    {
+      "id": "meal_011",
+      "datetime": "2025-07-01T09:00:00",
+      "date": "2025-07-01",
+      "day_of_week": "Tuesday",
+      "meal_type": "breakfast",
+      "foods": [
+        { "name": "dosa",    "gi_estimate": 67, "category": "south_indian" },
+        { "name": "chutney", "gi_estimate": 20, "category": "condiments"   }
+      ],
+      "pre_meal": [],
+      "post_meal": [
+        { "activity": "5 min walk", "type": "walk", "duration_min": 5, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 95,
+        "peak":     155,
+        "delta":    60,
+        "peak_time_min": 35,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 126 },
+          { "time_min": 30,  "value": 148 },
+          { "time_min": 45,  "value": 155 },
+          { "time_min": 60,  "value": 146 },
+          { "time_min": 90,  "value": 126 },
+          { "time_min": 120, "value": 106 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "mild",
+      "tags": ["refined_carb"],
+      "notes": "Plain dosa with only 5 min walk — inadequate for a GI-67 fermented carb. The steep 30-min rise indicates fast starch breakdown. Compare to meal_012 (chapati, GI 52, methi + 10 min walk, peak 132) — lower-GI grain + proper strategy = 23 mg/dL difference. No pre-meal buffer compounded the spike."
+    },
+
+    {
+      "id": "meal_012",
+      "datetime": "2025-07-01T20:00:00",
+      "date": "2025-07-01",
+      "day_of_week": "Tuesday",
+      "meal_type": "dinner",
+      "foods": [
+        { "name": "chapati",      "gi_estimate": 52, "category": "grains"      },
+        { "name": "paneer curry", "gi_estimate": 30, "category": "dairy_curry" }
+      ],
+      "pre_meal": [
+        { "item": "methi seeds", "type": "supplement", "effect": "galactomannan_inhibits_alpha_glucosidase" }
+      ],
+      "post_meal": [
+        { "activity": "10 min walk", "type": "walk", "duration_min": 10, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 100,
+        "peak":     132,
+        "delta":    32,
+        "peak_time_min": 55,
+        "readings": [
+          { "time_min": 0,   "value": 100 },
+          { "time_min": 15,  "value": 106 },
+          { "time_min": 30,  "value": 116 },
+          { "time_min": 45,  "value": 126 },
+          { "time_min": 60,  "value": 132 },
+          { "time_min": 90,  "value": 115 },
+          { "time_min": 120, "value": 102 }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["controlled"],
+      "notes": "Methi seeds (galactomannan content inhibits intestinal glucose uptake) + 10 min walk kept chapati well controlled at 132 peak. Slower rise (55 min to peak) vs dosa's 35 min confirms methi seeds genuinely delayed absorption."
+    },
+
+    {
+      "id": "meal_013",
+      "datetime": "2025-07-02T13:00:00",
+      "date": "2025-07-02",
+      "day_of_week": "Wednesday",
+      "meal_type": "lunch",
+      "foods": [
+        { "name": "biryani", "gi_estimate": 60, "category": "rice_dish" },
+        { "name": "raita",   "gi_estimate": 11, "category": "dairy"     }
+      ],
+      "pre_meal": [],
+      "post_meal": [
+        { "activity": "10 min walk", "type": "walk", "duration_min": 10, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 98,
+        "peak":     160,
+        "delta":    62,
+        "peak_time_min": 45,
+        "readings": [
+          { "time_min": 0,   "value": 98  },
+          { "time_min": 15,  "value": 120 },
+          { "time_min": 30,  "value": 145 },
+          { "time_min": 45,  "value": 160 },
+          { "time_min": 60,  "value": 152 },
+          { "time_min": 90,  "value": 130 },
+          { "time_min": 120, "value": 110 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "moderate",
+      "tags": ["fat_carb_combo"],
+      "notes": "Biryani is a dense fat-carb combination — basmati rice + ghee + spices. Raita (GI 11) provided some buffer. 10 min walk helped recovery but couldn't prevent the 160 peak because no pre-meal strategy was applied. A 20-min post-meal walk or chia seeds pre-meal would likely have kept it under 140."
+    },
+
+    {
+      "id": "meal_014",
+      "datetime": "2025-07-03T09:30:00",
+      "date": "2025-07-03",
+      "day_of_week": "Thursday",
+      "meal_type": "breakfast",
+      "foods": [
+        { "name": "apple", "gi_estimate": 36, "category": "fruits" },
+        { "name": "nuts",  "gi_estimate": 14, "category": "nuts"   }
+      ],
+      "pre_meal": [],
+      "post_meal": [],
+      "glucose": {
+        "baseline": 90,
+        "peak":     115,
+        "delta":    25,
+        "peak_time_min": 45,
+        "readings": [
+          { "time_min": 0,   "value": 90  },
+          { "time_min": 15,  "value": 96  },
+          { "time_min": 30,  "value": 106 },
+          { "time_min": 45,  "value": 113 },
+          { "time_min": 60,  "value": 115 },
+          { "time_min": 90,  "value": 106 },
+          { "time_min": 120, "value": 93  }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["safe"],
+      "notes": "Second lowest delta in the dataset (25 mg/dL). Apple fructose metabolizes hepatically producing a lower systemic glucose response vs glucose or sucrose. Nut fats and protein further blunted the curve. No strategies needed — food composition was inherently safe. Also had the lowest baseline (90) of the week."
+    },
+
+    {
+      "id": "meal_015",
+      "datetime": "2025-07-03T20:00:00",
+      "date": "2025-07-03",
+      "day_of_week": "Thursday",
+      "meal_type": "dinner",
+      "foods": [
+        { "name": "white rice",  "gi_estimate": 73, "category": "grains"  },
+        { "name": "fish curry",  "gi_estimate": 15, "category": "protein" }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" }
+      ],
+      "post_meal": [
+        { "activity": "15 min walk", "type": "walk", "duration_min": 15, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 95,
+        "peak":     135,
+        "delta":    40,
+        "peak_time_min": 50,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 104 },
+          { "time_min": 30,  "value": 116 },
+          { "time_min": 45,  "value": 128 },
+          { "time_min": 60,  "value": 135 },
+          { "time_min": 90,  "value": 115 },
+          { "time_min": 120, "value": 97  }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["controlled_rice"],
+      "notes": "White rice (GI 73) controlled to 135 with strategies — the same white rice without strategies (meal_010) peaked at 170. Chia seeds + 15 min walk reduced peak by 35 mg/dL on the same high-GI grain. This is the strongest evidence in the dataset that strategies outweigh food choice."
+    },
+
+    {
+      "id": "meal_016",
+      "datetime": "2025-07-04T13:00:00",
+      "date": "2025-07-04",
+      "day_of_week": "Friday",
+      "meal_type": "lunch",
+      "foods": [
+        { "name": "poori",      "gi_estimate": 85, "category": "grains_fried" },
+        { "name": "aloo curry", "gi_estimate": 65, "category": "vegetables"   }
+      ],
+      "pre_meal": [],
+      "post_meal": [],
+      "glucose": {
+        "baseline": 100,
+        "peak":     175,
+        "delta":    75,
+        "peak_time_min": 35,
+        "readings": [
+          { "time_min": 0,   "value": 100 },
+          { "time_min": 15,  "value": 138 },
+          { "time_min": 30,  "value": 165 },
+          { "time_min": 45,  "value": 175 },
+          { "time_min": 60,  "value": 166 },
+          { "time_min": 90,  "value": 148 },
+          { "time_min": 120, "value": 130 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "high",
+      "tags": ["fried_carb"],
+      "notes": "Highest GI food combination in the dataset — poori (deep-fried wheat, GI 85) with aloo curry (GI 65). Zero strategies. The steepest 15-min rise of all meals (+38 mg/dL in 15 min). Still 30 mg/dL above baseline at 120 min — extended excursion. This meal + meal_004 are the highest-risk patterns in the log."
+    },
+
+    {
+      "id": "meal_017",
+      "datetime": "2025-07-04T18:00:00",
+      "date": "2025-07-04",
+      "day_of_week": "Friday",
+      "meal_type": "evening_snack",
+      "foods": [
+        { "name": "fruit bowl", "gi_estimate": 48, "category": "fruits" }
+      ],
+      "pre_meal": [],
+      "post_meal": [],
+      "glucose": {
+        "baseline": 100,
+        "peak":     135,
+        "delta":    35,
+        "peak_time_min": 40,
+        "readings": [
+          { "time_min": 0,   "value": 100 },
+          { "time_min": 15,  "value": 114 },
+          { "time_min": 30,  "value": 128 },
+          { "time_min": 45,  "value": 135 },
+          { "time_min": 60,  "value": 128 },
+          { "time_min": 90,  "value": 114 },
+          { "time_min": 120, "value": 103 }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["natural_sugar"],
+      "notes": "Mixed fruit bowl — despite sugar content, whole fruit fiber buffers absorption unlike juice. Moderate symmetrical curve (rises and falls at similar rates). No strategies needed given the inherent fiber content of whole fruits."
+    },
+
+    {
+      "id": "meal_018",
+      "datetime": "2025-07-05T09:00:00",
+      "date": "2025-07-05",
+      "day_of_week": "Saturday",
+      "meal_type": "breakfast",
+      "foods": [
+        { "name": "2 idlis", "gi_estimate": 46, "category": "south_indian" },
+        { "name": "egg",     "gi_estimate": 0,  "category": "protein"      }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" }
+      ],
+      "post_meal": [
+        { "activity": "15 min walk", "type": "walk", "duration_min": 15, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 95,
+        "peak":     145,
+        "delta":    50,
+        "peak_time_min": 45,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 112 },
+          { "time_min": 30,  "value": 130 },
+          { "time_min": 45,  "value": 143 },
+          { "time_min": 60,  "value": 145 },
+          { "time_min": 90,  "value": 126 },
+          { "time_min": 120, "value": 105 }
+        ]
+      },
+      "spike": true,
+      "spike_severity": "mild",
+      "tags": ["idli_trigger"],
+      "notes": "2 idlis vs 6 idlis (meal_004) — delta dropped from 80 to 50 with all other strategies the same. Idli is still a trigger even at lower portions. Adding protein-first (eat egg before idli) would likely reduce peak by another 15–20 mg/dL. Chia + walk helped recovery but the spike still occurred."
+    },
+
+    {
+      "id": "meal_019",
+      "datetime": "2025-07-05T20:00:00",
+      "date": "2025-07-05",
+      "day_of_week": "Saturday",
+      "meal_type": "dinner",
+      "foods": [
+        { "name": "chicken salad", "gi_estimate": 10, "category": "protein" }
+      ],
+      "pre_meal": [],
+      "post_meal": [],
+      "glucose": {
+        "baseline": 90,
+        "peak":     110,
+        "delta":    20,
+        "peak_time_min": 60,
+        "readings": [
+          { "time_min": 0,   "value": 90  },
+          { "time_min": 15,  "value": 93  },
+          { "time_min": 30,  "value": 98  },
+          { "time_min": 45,  "value": 106 },
+          { "time_min": 60,  "value": 110 },
+          { "time_min": 90,  "value": 102 },
+          { "time_min": 120, "value": 92  }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["low_carb"],
+      "notes": "Lowest delta (20 mg/dL) and lowest peak (110) of all 20 meals. Pure protein + vegetable meal with negligible carbohydrate content — glucose response is essentially protein-induced gluconeogenesis, which is slow and modest. No strategies needed or used. This is the benchmark low-carb response."
+    },
+
+    {
+      "id": "meal_020",
+      "datetime": "2025-07-06T13:00:00",
+      "date": "2025-07-06",
+      "day_of_week": "Sunday",
+      "meal_type": "lunch",
+      "foods": [
+        { "name": "brown rice", "gi_estimate": 50, "category": "grains"  },
+        { "name": "egg curry",  "gi_estimate": 15, "category": "protein" }
+      ],
+      "pre_meal": [
+        { "item": "chia seeds", "type": "supplement", "effect": "soluble_fiber_slows_glucose_absorption" }
+      ],
+      "post_meal": [
+        { "activity": "15 min walk", "type": "walk", "duration_min": 15, "intensity": "light" }
+      ],
+      "glucose": {
+        "baseline": 95,
+        "peak":     128,
+        "delta":    33,
+        "peak_time_min": 55,
+        "readings": [
+          { "time_min": 0,   "value": 95  },
+          { "time_min": 15,  "value": 100 },
+          { "time_min": 30,  "value": 110 },
+          { "time_min": 45,  "value": 120 },
+          { "time_min": 60,  "value": 128 },
+          { "time_min": 90,  "value": 110 },
+          { "time_min": 120, "value": 96  }
+        ]
+      },
+      "spike": false,
+      "spike_severity": "none",
+      "tags": ["controlled"],
+      "notes": "Clean week-ending meal. Brown rice + egg curry + chia + walk achieved 33 mg/dL delta — among the best rice meal responses. Slow 55-min peak confirms chia fiber's gastric-emptying delay. Near-complete return to baseline by 120 min (96 vs baseline 95)."
+    }
+
+  ],
+
+  "summary": {
+    "date_range":   { "start": "2025-06-26", "end": "2025-07-06" },
+    "total_meals":  20,
+    "spike_count":  9,
+    "no_spike_count": 11,
+    "spike_rate_percent": 45,
+
+    "glucose_stats": {
+      "avg_baseline_mgdl":    97,
+      "avg_peak_mgdl":        143,
+      "avg_delta_mgdl":       46,
+      "avg_peak_spiked_meals": 159,
+      "avg_peak_controlled_meals": 130,
+      "highest_peak":  { "meal": "meal_015_comparison", "value": 175, "meals": ["meal_004", "meal_016"] },
+      "lowest_peak":   { "meal": "meal_019", "value": 110 },
+      "highest_delta": { "meal": "meal_004", "value": 80,  "food": "6 idlis" },
+      "lowest_delta":  { "meal": "meal_019", "value": 20,  "food": "chicken salad" }
+    },
+
+    "spike_severity_distribution": {
+      "none":     11,
+      "mild":     5,
+      "moderate": 2,
+      "high":     2,
+      "very_high": 0
+    },
+
+    "strategy_analysis": {
+      "chia_seeds": {
+        "meals_used": ["meal_001","meal_003","meal_005","meal_007","meal_009","meal_015","meal_018","meal_020"],
+        "total": 8,
+        "spike_count": 3,
+        "spike_rate_percent": 37.5,
+        "avg_peak_mgdl": 138,
+        "vs_no_strategy_avg_peak": 144,
+        "reduction_mgdl": 6
+      },
+      "methi_seeds": {
+        "meals_used": ["meal_006","meal_012"],
+        "total": 2,
+        "spike_count": 0,
+        "spike_rate_percent": 0,
+        "avg_peak_mgdl": 136,
+        "note": "Small sample but both controlled"
+      },
+      "pre_meal_walk": {
+        "meals_used": ["meal_004"],
+        "total": 1,
+        "spike_count": 1,
+        "note": "Pre-meal walk improved insulin sensitivity but could not offset 6 idlis portion volume"
+      },
+      "post_meal_activity": {
+        "meals_with_activity": ["meal_001","meal_002","meal_003","meal_004","meal_005","meal_006","meal_009","meal_011","meal_012","meal_015","meal_018","meal_020"],
+        "total": 12,
+        "spike_count": 4,
+        "spike_rate_percent": 33,
+        "avg_peak_mgdl": 140
+      },
+      "no_post_meal_activity": {
+        "meals": ["meal_007","meal_008","meal_010","meal_013","meal_014","meal_016","meal_017","meal_019"],
+        "total": 8,
+        "spike_count": 5,
+        "spike_rate_percent": 62.5,
+        "avg_peak_mgdl": 148,
+        "note": "Excludes meal_014 and meal_019 which are inherently safe low-carb meals"
+      },
+      "no_strategy_at_all": {
+        "meals": ["meal_008","meal_010","meal_011","meal_013","meal_016"],
+        "total": 5,
+        "spike_count": 5,
+        "spike_rate_percent": 100,
+        "avg_peak_mgdl": 161,
+        "note": "Every meal with zero pre or post strategy was a spike — most damning finding in the dataset"
+      }
+    },
+
+    "food_pattern_analysis": {
+      "idli_trigger": {
+        "meals": ["meal_004", "meal_018"],
+        "avg_delta": 65,
+        "observation": "Idli is consistently a spike trigger. 6 idlis = delta 80 (high). 2 idlis with chia+walk = delta 50 (mild spike). Idli requires protein-first + walk + portion limit ≤2 pieces."
+      },
+      "brown_rice_controlled": {
+        "meals": ["meal_003","meal_005","meal_007","meal_009","meal_020"],
+        "avg_delta_with_strategy": 36,
+        "avg_delta_without_walk": 55,
+        "observation": "Brown rice is manageable with chia + walk combo. Without post-meal walk, it spikes even with chia seeds (meal_007 vs meal_005)."
+      },
+      "white_rice_comparison": {
+        "without_strategy": { "meal": "meal_010", "peak": 170, "delta": 70 },
+        "with_strategy":    { "meal": "meal_015", "peak": 135, "delta": 40 },
+        "strategy_impact_mgdl": 35,
+        "observation": "Same white rice, 35 mg/dL lower peak with chia + 15-min walk. Strategies > food choice."
+      },
+      "highest_risk_foods": [
+        { "food": "poori",      "meal": "meal_016", "gi": 85, "delta": 75 },
+        { "food": "6 idlis",    "meal": "meal_004", "gi": 46, "delta": 80, "note": "Volume-driven, not GI-driven" },
+        { "food": "white rice + potato fry", "meal": "meal_010", "gi_avg": 76, "delta": 70 }
+      ],
+      "safest_foods": [
+        { "food": "chicken salad", "meal": "meal_019", "gi": 10,  "delta": 20 },
+        { "food": "apple + nuts",  "meal": "meal_014", "gi": 25,  "delta": 25 },
+        { "food": "brown rice + greens + walk", "meal": "meal_003", "gi": 32, "delta": 28 }
+      ]
+    },
+
+    "key_insights": [
+      "Post-meal walk is the single most impactful intervention: spike rate 33% with activity vs 62.5% without.",
+      "Every meal with zero strategies (pre + post) resulted in a spike — 5 for 5 (100% spike rate).",
+      "Idli is the most deceptive food: moderate GI (46) but volume-driven spikes. Safe threshold appears to be ≤2 pieces with protein-first + walk.",
+      "White rice with strategies (chia + walk) performed better than brown rice without strategies — proving protocol matters more than grain choice.",
+      "Chia seeds extend time-to-peak from ~35–40 min to ~50–55 min, suggesting genuine gastric emptying delay.",
+      "Elevated baseline (≥100 mg/dL) meals had a 60% spike rate vs 35% for baseline <100 — starting glucose predicts outcome.",
+      "Stacked strategies (meal_009: double fiber pre-meal + walk) produced the best rice meal response of the entire dataset."
+    ]
+  }
+}

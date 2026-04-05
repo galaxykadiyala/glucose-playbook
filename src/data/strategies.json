@@ -1,0 +1,232 @@
+[
+  {
+    "id": "post-meal-walk",
+    "name": "Post-Meal Walking",
+    "category": "exercise",
+    "categoryLabel": "Exercise",
+    "effectiveness": 92,
+    "timeToEffect": "10–15 min",
+    "effort": "low",
+    "evidence": "strong",
+    "description": "Walking activates GLUT4 transporters in muscle cells, allowing glucose uptake without insulin. Even 10 minutes after eating can reduce post-meal spikes by 25–35%.",
+    "mechanism": "Muscle contraction triggers insulin-independent glucose transport",
+    "howTo": [
+      "Walk at a gentle pace (not exercise intensity) for 10–20 minutes",
+      "Start within 30 minutes of finishing your meal",
+      "Even a 5-minute walk provides measurable benefit",
+      "Outdoor walking adds a psychological stress-reduction bonus"
+    ],
+    "studies": [
+      "Johnson et al. (2020): 15-min walk after meals reduced postprandial glucose by 32%",
+      "Colberg et al. (2013): Walking beats metformin in reducing post-meal spikes"
+    ],
+    "icon": "walking"
+  },
+  {
+    "id": "resistance-training",
+    "name": "Resistance Training",
+    "category": "exercise",
+    "categoryLabel": "Exercise",
+    "effectiveness": 90,
+    "timeToEffect": "24–48 hrs",
+    "effort": "high",
+    "evidence": "strong",
+    "description": "Building muscle mass creates more glucose-absorbing tissue. Regular strength training improves insulin sensitivity for 24–48 hours post-workout and lowers A1C by 0.3–0.6% over 12 weeks.",
+    "mechanism": "Increased muscle mass = larger glucose sink; AMPK activation improves insulin signaling",
+    "howTo": [
+      "3 sessions per week minimum, targeting major muscle groups",
+      "Compound movements: squats, deadlifts, rows, presses",
+      "Progressive overload — gradually increase weight or reps",
+      "Session timing 30–60 minutes after meals for maximum glucose benefit"
+    ],
+    "studies": [
+      "Holten et al. (2004): 6 weeks resistance training improved insulin sensitivity by 46%",
+      "Church et al. (2010): Combined cardio + resistance most effective for A1C"
+    ],
+    "icon": "barbell"
+  },
+  {
+    "id": "protein-first",
+    "name": "Protein-First Meal Sequencing",
+    "category": "diet",
+    "categoryLabel": "Diet",
+    "effectiveness": 86,
+    "timeToEffect": "Immediate",
+    "effort": "low",
+    "evidence": "strong",
+    "description": "Eating protein and vegetables before carbohydrates at the same meal reduces the glycemic impact by 30–40%. Protein stimulates GLP-1, which slows gastric emptying.",
+    "mechanism": "GLP-1 secretion from protein/fiber slows gastric emptying and stimulates insulin",
+    "howTo": [
+      "Eat protein (chicken, fish, eggs, legumes) first in your meal",
+      "Follow with non-starchy vegetables",
+      "Leave carbohydrates (bread, rice, pasta) for last",
+      "This works even if you eat everything in 15 minutes"
+    ],
+    "studies": [
+      "Shukla et al. (2017): Food order reduced post-meal spike by 37% in T2D patients",
+      "Imai et al. (2014): Vegetable-first eating reduced 2-hour glucose by 29%"
+    ],
+    "icon": "utensils"
+  },
+  {
+    "id": "low-gi-swaps",
+    "name": "Low-GI Food Substitutions",
+    "category": "diet",
+    "categoryLabel": "Diet",
+    "effectiveness": 84,
+    "timeToEffect": "Immediate",
+    "effort": "medium",
+    "evidence": "strong",
+    "description": "Systematically replacing high-GI foods with low-GI alternatives reduces average glucose by 10–15 mg/dL and A1C by 0.5% without calorie restriction.",
+    "mechanism": "Slower starch digestion due to fiber, resistant starch, and reduced amylopectin",
+    "howTo": [
+      "White rice → brown rice, barley, or quinoa",
+      "White bread → sourdough, rye, or whole grain",
+      "Potato → sweet potato, lentils, or cauliflower",
+      "Start with your highest-frequency carb food first"
+    ],
+    "studies": [
+      "Brand-Miller et al. (2003): Low-GI diet reduced A1C by 0.5% vs high-GI",
+      "Thomas & Elliott (2010): Meta-analysis of 11 trials confirms A1C benefit"
+    ],
+    "icon": "leaf"
+  },
+  {
+    "id": "fiber-rich",
+    "name": "Increasing Dietary Fiber",
+    "category": "diet",
+    "categoryLabel": "Diet",
+    "effectiveness": 82,
+    "timeToEffect": "Immediate",
+    "effort": "medium",
+    "evidence": "strong",
+    "description": "Soluble fiber forms a viscous gel in the gut that slows glucose absorption. Each 10g increase in daily fiber reduces post-meal glucose peaks by ~15 mg/dL.",
+    "mechanism": "Viscous gel formation impedes glucose diffusion across intestinal wall",
+    "howTo": [
+      "Target 30–35g of fiber per day (most people get 15g)",
+      "Best sources: oats, legumes, psyllium, vegetables, berries",
+      "Add psyllium husk to smoothies or oatmeal (5g fiber per tbsp)",
+      "Increase gradually to prevent GI discomfort"
+    ],
+    "studies": [
+      "Threapleton et al. (2013): 7g/day increase in fiber → 9% lower diabetes risk",
+      "Post et al. (2012): Psyllium reduced post-meal glucose by 18% in T2D"
+    ],
+    "icon": "wheat"
+  },
+  {
+    "id": "consistent-meal-timing",
+    "name": "Consistent Meal Timing",
+    "category": "lifestyle",
+    "categoryLabel": "Lifestyle",
+    "effectiveness": 80,
+    "timeToEffect": "7–14 days",
+    "effort": "medium",
+    "evidence": "moderate",
+    "description": "Eating at consistent times trains circadian glucose metabolism. Irregular meal timing disrupts the anticipatory insulin response, increasing peak glucose spikes by 15–25%.",
+    "mechanism": "Circadian clock regulates insulin secretion and hepatic glucose output",
+    "howTo": [
+      "Eat breakfast within 1 hour of waking, daily",
+      "Keep lunch and dinner within a 30-minute window each day",
+      "Avoid eating after 8 PM — metabolic rate slows",
+      "Set meal alarms for the first 2 weeks to build the habit"
+    ],
+    "studies": [
+      "Saad et al. (2012): Fixed meal timing reduced glucose variability by 23%",
+      "Flanagan et al. (2021): Irregular eating patterns increased A1C by 0.3%"
+    ],
+    "icon": "clock"
+  },
+  {
+    "id": "quality-sleep",
+    "name": "Optimizing Sleep Quality",
+    "category": "lifestyle",
+    "categoryLabel": "Lifestyle",
+    "effectiveness": 78,
+    "timeToEffect": "3–7 days",
+    "effort": "medium",
+    "evidence": "strong",
+    "description": "Seven to nine hours of quality sleep restores insulin sensitivity by 20–30% compared to sleep deprivation. Deep (slow-wave) sleep specifically governs glucose regulation.",
+    "mechanism": "Growth hormone during deep sleep promotes insulin sensitivity; cortisol suppressed",
+    "howTo": [
+      "Maintain a consistent sleep and wake time, even on weekends",
+      "Keep bedroom temperature 65–68°F (18–20°C)",
+      "No caffeine after 1 PM",
+      "Screen-free wind-down routine 60 min before bed"
+    ],
+    "studies": [
+      "Spiegel et al. (1999): 4hrs/night for 6 days reduced insulin sensitivity by 30%",
+      "Tasali et al. (2008): Slow-wave sleep suppression mimics T2D metabolic profile"
+    ],
+    "icon": "moon"
+  },
+  {
+    "id": "cold-vinegar",
+    "name": "Apple Cider Vinegar (Pre-Meal)",
+    "category": "supplement",
+    "categoryLabel": "Supplement",
+    "effectiveness": 62,
+    "timeToEffect": "30 min",
+    "effort": "low",
+    "evidence": "moderate",
+    "description": "Acetic acid in vinegar inhibits salivary and pancreatic amylase, slowing starch digestion. It also improves insulin sensitivity via AMPK activation.",
+    "mechanism": "Amylase inhibition slows starch breakdown; AMPK activation mimics exercise effect",
+    "howTo": [
+      "1–2 tablespoons diluted in 8 oz of water",
+      "Drink 15–30 minutes before high-carb meals",
+      "Never consume undiluted — damages tooth enamel",
+      "Use straw to protect teeth; rinse mouth after"
+    ],
+    "studies": [
+      "Johnston et al. (2004): ACV reduced post-meal glucose by 20% in insulin-resistant adults",
+      "Mitrou et al. (2015): 20g ACV reduced glucose peak by 31% with white bread"
+    ],
+    "icon": "flask"
+  },
+  {
+    "id": "stress-management",
+    "name": "Stress Reduction Practices",
+    "category": "lifestyle",
+    "categoryLabel": "Lifestyle",
+    "effectiveness": 72,
+    "timeToEffect": "Minutes to hours",
+    "effort": "medium",
+    "evidence": "moderate",
+    "description": "Chronic stress elevates cortisol, which raises glucose and blunts insulin. Structured relaxation can lower average glucose by 8–15 mg/dL in stressed individuals.",
+    "mechanism": "Reducing cortisol lowers hepatic glucose output and restores insulin receptor sensitivity",
+    "howTo": [
+      "Daily 10-minute mindfulness or breathing practice",
+      "4-7-8 breathing: inhale 4s, hold 7s, exhale 8s — repeat 4 cycles",
+      "Regular nature walks combine exercise and stress reduction",
+      "Address root causes: workload, sleep debt, relationship tension"
+    ],
+    "studies": [
+      "Surwit et al. (2002): Diabetes education + stress management reduced A1C by 0.5%",
+      "van der Wulp et al. (2012): Mindfulness reduced glucose variability in T2D"
+    ],
+    "icon": "heart"
+  },
+  {
+    "id": "cold-exposure",
+    "name": "Brief Cold Exposure",
+    "category": "lifestyle",
+    "categoryLabel": "Lifestyle",
+    "effectiveness": 58,
+    "timeToEffect": "30–60 min",
+    "effort": "medium",
+    "evidence": "emerging",
+    "description": "Cold exposure activates brown adipose tissue (BAT), which burns glucose for heat production. Regular cold exposure improves insulin sensitivity in preliminary studies.",
+    "mechanism": "BAT thermogenesis consumes glucose; cold-induced norepinephrine improves GLUT4 translocation",
+    "howTo": [
+      "2–5 minute cold shower at the end of a warm shower",
+      "Cold face immersion (bowl of ice water, 30 seconds)",
+      "Short walks in cold weather after meals",
+      "Note: benefits are modest; combine with other strategies"
+    ],
+    "studies": [
+      "Hanssen et al. (2015): 10-day cold acclimation improved insulin sensitivity by 43%",
+      "Van der Lans et al. (2013): Cold exposure activated BAT and improved glucose clearance"
+    ],
+    "icon": "snowflake"
+  }
+]

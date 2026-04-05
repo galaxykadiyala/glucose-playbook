@@ -1,0 +1,192 @@
+[
+  {
+    "id": "refined-carbs",
+    "name": "Refined Carbohydrates",
+    "category": "food",
+    "categoryLabel": "Food",
+    "frequency": 85,
+    "avgSpike": 52,
+    "peakTime": 30,
+    "duration": 120,
+    "description": "White bread, rice, pasta, and pastries rapidly digest into glucose. Without fiber or protein to slow absorption, they cause steep blood sugar spikes within 30–45 minutes.",
+    "examples": ["White bread", "White rice", "Pasta", "Crackers", "Pastries", "Bagels"],
+    "avoidanceTips": [
+      "Replace with whole-grain versions (GI reduction of 20–30 points)",
+      "Combine with protein or fat to slow digestion",
+      "Reduce portion size by 30–50%",
+      "Choose pasta al dente — less broken down, lower GI"
+    ],
+    "severity": "high"
+  },
+  {
+    "id": "sugary-drinks",
+    "name": "Sugary Beverages",
+    "category": "food",
+    "categoryLabel": "Food",
+    "frequency": 78,
+    "avgSpike": 60,
+    "peakTime": 20,
+    "duration": 90,
+    "description": "Liquid sugars — juices, sodas, energy drinks, and sweetened coffees — bypass the normal digestion delay. They spike glucose faster and higher than solid foods with equivalent carbs.",
+    "examples": ["Orange juice", "Soda / cola", "Energy drinks", "Sweet tea", "Flavored lattes", "Sports drinks"],
+    "avoidanceTips": [
+      "Replace juice with whole fruit — fiber slows absorption",
+      "Choose sparkling water with lemon instead of soda",
+      "Use unsweetened coffee/tea with a splash of cream",
+      "If you must drink juice, limit to 4 oz and pair with protein"
+    ],
+    "severity": "high"
+  },
+  {
+    "id": "large-portions",
+    "name": "Oversized Meal Portions",
+    "category": "behavior",
+    "categoryLabel": "Behavior",
+    "frequency": 72,
+    "avgSpike": 38,
+    "peakTime": 45,
+    "duration": 150,
+    "description": "Even healthy foods spike glucose when eaten in large quantities. The total glycemic load of a meal matters more than any single ingredient.",
+    "examples": ["Oversized pasta bowls", "Large rice plates", "All-you-can-eat buffets", "Skipping meals then overeating"],
+    "avoidanceTips": [
+      "Use the plate method: ½ vegetables, ¼ protein, ¼ carbs",
+      "Eat slowly — satiety signals take 20 minutes",
+      "Start with a salad or soup to reduce main-course intake",
+      "Use smaller plates to reduce portion sizes naturally"
+    ],
+    "severity": "medium"
+  },
+  {
+    "id": "sedentary-postmeal",
+    "name": "Sitting After Meals",
+    "category": "behavior",
+    "categoryLabel": "Behavior",
+    "frequency": 68,
+    "avgSpike": 32,
+    "peakTime": 60,
+    "duration": 30,
+    "description": "Muscle contractions during movement help cells absorb glucose independently of insulin. Sitting still after a meal allows glucose to accumulate in the bloodstream.",
+    "examples": ["Eating at a desk then working", "After-dinner TV time", "Car rides after meals", "Lying down after lunch"],
+    "avoidanceTips": [
+      "Walk 10–15 minutes after each meal",
+      "Do light activity like standing or slow pacing",
+      "Schedule calls as walking meetings after lunch",
+      "Even 100 squats post-meal significantly improves TIR"
+    ],
+    "severity": "medium"
+  },
+  {
+    "id": "stress",
+    "name": "Stress & High Cortisol",
+    "category": "lifestyle",
+    "categoryLabel": "Lifestyle",
+    "frequency": 62,
+    "avgSpike": 28,
+    "peakTime": 60,
+    "duration": 180,
+    "description": "Cortisol — the stress hormone — triggers gluconeogenesis (liver glucose release) and reduces insulin sensitivity. Emotional or work stress can raise fasting glucose by 20–40 mg/dL.",
+    "examples": ["Work deadlines", "Conflict or arguments", "Financial anxiety", "Public speaking", "Lack of control situations"],
+    "avoidanceTips": [
+      "Practice 4-7-8 breathing: inhale 4s, hold 7s, exhale 8s",
+      "Schedule regular decompression breaks",
+      "Physical exercise is the fastest cortisol flush",
+      "Monitor glucose during known stressful periods"
+    ],
+    "severity": "medium"
+  },
+  {
+    "id": "poor-sleep",
+    "name": "Poor or Short Sleep",
+    "category": "lifestyle",
+    "categoryLabel": "Lifestyle",
+    "frequency": 58,
+    "avgSpike": 24,
+    "peakTime": 480,
+    "duration": 1440,
+    "description": "Even one night of poor sleep reduces insulin sensitivity by up to 25%. Growth hormone secretion during deep sleep is critical for glucose regulation. Chronic sleep debt raises A1C.",
+    "examples": ["Less than 6 hours of sleep", "Fragmented sleep", "Late bedtime (after midnight)", "Sleep apnea events"],
+    "avoidanceTips": [
+      "Target 7–9 hours of consistent sleep nightly",
+      "Keep a fixed wake time, even on weekends",
+      "Avoid screens 60 min before bed",
+      "Cool bedroom (65–68°F) improves deep sleep quality"
+    ],
+    "severity": "medium"
+  },
+  {
+    "id": "rapid-eating",
+    "name": "Eating Too Quickly",
+    "category": "behavior",
+    "categoryLabel": "Behavior",
+    "frequency": 55,
+    "avgSpike": 26,
+    "peakTime": 25,
+    "duration": 90,
+    "description": "Faster eating correlates with larger spikes independent of food type. Thorough chewing begins starch digestion in the mouth and signals incretin hormones that blunt glucose rise.",
+    "examples": ["Eating in under 10 minutes", "Eating while distracted/working", "Skipping chewing", "Eating on the go"],
+    "avoidanceTips": [
+      "Target 20+ minutes for each meal",
+      "Put down utensils between bites",
+      "Chew each bite 20–30 times",
+      "No phones or screens during meals"
+    ],
+    "severity": "low"
+  },
+  {
+    "id": "dawn-phenomenon",
+    "name": "Dawn Phenomenon",
+    "category": "physiology",
+    "categoryLabel": "Physiology",
+    "frequency": 52,
+    "avgSpike": 22,
+    "peakTime": 360,
+    "duration": 120,
+    "description": "Between 4–8 AM, the body releases growth hormone and cortisol to prepare for waking. This triggers hepatic glucose release, raising fasting glucose by 15–30 mg/dL even without eating.",
+    "examples": ["Elevated fasting glucose despite good evening levels", "Morning readings higher than midnight levels"],
+    "avoidanceTips": [
+      "Light evening snack with protein can blunt it",
+      "Morning exercise quickly uses the released glucose",
+      "Avoid high-carb breakfasts that compound the effect",
+      "Consistent sleep/wake timing helps stabilize the pattern"
+    ],
+    "severity": "low"
+  },
+  {
+    "id": "alcohol",
+    "name": "Alcohol & Rebound Effect",
+    "category": "food",
+    "categoryLabel": "Food",
+    "frequency": 42,
+    "avgSpike": 45,
+    "peakTime": 240,
+    "duration": 300,
+    "description": "Alcohol initially lowers glucose (liver prioritizes alcohol metabolism over gluconeogenesis). The rebound spike 3–8 hours later can be significant, especially with sugary mixers.",
+    "examples": ["Beer (high carb)", "Sugary cocktails", "Sweet wine", "Cider"],
+    "avoidanceTips": [
+      "Choose dry wine or spirits with sugar-free mixers",
+      "Never drink on an empty stomach",
+      "Monitor glucose 4–6 hours after drinking",
+      "Limit to 1–2 standard drinks"
+    ],
+    "severity": "medium"
+  },
+  {
+    "id": "illness",
+    "name": "Illness & Infection",
+    "category": "physiology",
+    "categoryLabel": "Physiology",
+    "frequency": 38,
+    "avgSpike": 35,
+    "peakTime": 1440,
+    "duration": 4320,
+    "description": "The immune response to illness releases counter-regulatory hormones (cortisol, glucagon, epinephrine) that raise blood glucose, sometimes significantly, even without eating.",
+    "examples": ["Common cold", "Flu", "Urinary tract infections", "Dental infections", "Post-surgery recovery"],
+    "avoidanceTips": [
+      "Increase glucose monitoring frequency when sick",
+      "Stay well-hydrated",
+      "Contact your healthcare provider for sick day rules",
+      "Prioritize sleep and rest for faster recovery"
+    ],
+    "severity": "high"
+  }
+]

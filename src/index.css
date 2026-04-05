@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+
+  .dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-300;
+  }
+}
+
+/* ── Dark mode: neutral colour overrides ──────────────────────────────────────
+   These override the most common neutral Tailwind classes across all pages
+   without needing to add dark: variants to every JSX file.
+   Coloured accent classes (emerald, amber, rose, indigo, blue) are left alone —
+   they remain readable and visually consistent in dark mode.
+────────────────────────────────────────────────────────────────────────────── */
+.dark .bg-white           { background-color: #1e293b; } /* slate-800 */
+.dark .bg-slate-50        { background-color: #1e293b; } /* subtle card bg */
+.dark .bg-slate-100       { background-color: #334155; } /* slate-700 */
+
+.dark .border-slate-100   { border-color: #334155; }     /* slate-700 */
+.dark .border-slate-200   { border-color: #475569; }     /* slate-600 */
+
+.dark .text-slate-900     { color: #f1f5f9; }            /* slate-100 */
+.dark .text-slate-800     { color: #e2e8f0; }            /* slate-200 */
+.dark .text-slate-700     { color: #cbd5e1; }            /* slate-300 */
+.dark .text-slate-600     { color: #94a3b8; }            /* slate-400 */
+.dark .text-slate-500     { color: #94a3b8; }            /* slate-400 */
+.dark .text-slate-400     { color: #64748b; }            /* slate-500 */
+
+/* ── Dark mode: Recharts fixes ────────────────────────────────────────────── */
+
+/* Grid lines */
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical   line { stroke: #1e293b; }
+
+/* Axis tick labels */
+.dark .recharts-cartesian-axis-tick-value { fill: #475569; }
+.dark .recharts-text                       { fill: #475569; }
+
+/* Default tooltip (used when no custom content is provided) */
+.dark .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+.dark .recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-label {
+  color: #94a3b8 !important;
+}
+
+/* Legend text */
+.dark .recharts-legend-item-text { color: #94a3b8 !important; }
+
+/* Reference area opacity boost in dark mode */
+.dark .recharts-reference-area-rect { fill-opacity: 0.18; }
+
+/* Cursor line */
+.dark .recharts-tooltip-cursor { stroke: #334155; }
+
+@layer components {
+  .glucose-badge-low      { @apply bg-red-50 text-red-600 border border-red-200; }
+  .glucose-badge-normal   { @apply bg-emerald-50 text-emerald-700 border border-emerald-200; }
+  .glucose-badge-elevated { @apply bg-amber-50 text-amber-700 border border-amber-200; }
+  .glucose-badge-high     { @apply bg-red-50 text-red-700 border border-red-200; }
+
+  .page-header {
+    @apply mb-6;
+  }
+  .page-title {
+    @apply text-2xl font-bold text-slate-900;
+  }
+  .page-subtitle {
+    @apply text-sm text-slate-500 mt-1;
+  }
+}

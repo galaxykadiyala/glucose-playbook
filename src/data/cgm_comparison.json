@@ -1,0 +1,24 @@
+{
+  "datasets": [
+    {
+      "stint_id": "stint_2",
+      "label": "Feb 28 – Mar 15, 2026",
+      "avg_glucose": 111,
+      "avg_score": 77,
+      "spike_count": 45,
+      "tir_in_range": 90,
+      "sd": 20.7,
+      "cv": 18.6
+    },
+    {
+      "stint_id": "stint_3",
+      "label": "Mar 15 – Mar 30, 2026",
+      "avg_glucose": 117,
+      "avg_score": 66,
+      "spike_count": 63,
+      "tir_in_range": 85,
+      "sd": 24.6,
+      "cv": 21
+    }
+  ]
+}
