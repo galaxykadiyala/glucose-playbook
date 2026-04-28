@@ -18,6 +18,7 @@ export default function WhatsAppConnect() {
       const token = session?.access_token
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
       const res = await fetch(`${apiUrl}/api/whatsapp-code/${user.id}`, {
+        method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       })
       if (!res.ok) throw new Error(`Server error ${res.status}`)
