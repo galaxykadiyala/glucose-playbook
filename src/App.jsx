@@ -11,6 +11,7 @@ import FixYourGlucose from './pages/FixYourGlucose'
 import Upload from './pages/Upload'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import AuthCallback from './pages/AuthCallback'
 import { useUser } from './context/UserContext'
 
 function RequireAuth({ children }) {
@@ -29,8 +30,9 @@ function RequireAuth({ children }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/login"  element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/login"         element={<Login />} />
+      <Route path="/signup"        element={<Signup />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
       <Route
         path="/*"
         element={
