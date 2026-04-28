@@ -21,16 +21,31 @@ async function getUserByWhatsApp(whatsappNumber) {
 }
 
 async function handleLinkCode(code, whatsappNumber) {
-  const { data: link, error } = await supabase
+  const normalized = code.trim().toUpperCase()
+  console.log('Link attempt:', { rawCode: code, normalizedCode: normalized, whatsappNumber })
+
+  // First check the code exists (allows re-linking from a different number)
+  const { data: existing, error: lookupError } = await supabase
     .from('user_whatsapp_links')
-    .update({ whatsapp_number: whatsappNumber, linked_at: new Date().toISOString() })
-    .eq('link_code', code.toUpperCase())
-    .is('whatsapp_number', null)
-    .select('user_id')
+    .select('user_id, whatsapp_number')
+    .eq('link_code', normalized)
     .single()
 
-  if (error || !link) {
-    return twiml('Invalid or already-used code. Please generate a fresh code in the Glucose Decode app.')
+  console.log('DB lookup result:', { existing, lookupError })
+
+  if (lookupError || !existing) {
+    return twiml('Invalid code. Please generate a fresh code in the Glucose Decode app.')
+  }
+
+  const { error: updateError } = await supabase
+    .from('user_whatsapp_links')
+    .update({ whatsapp_number: whatsappNumber, linked_at: new Date().toISOString() })
+    .eq('link_code', normalized)
+
+  console.log('DB update result:', { updateError })
+
+  if (updateError) {
+    return twiml('Could not link your number. Please try again.')
   }
   return twiml('✅ WhatsApp linked! Send me what you ate or a glucose reading anytime.')
 }
