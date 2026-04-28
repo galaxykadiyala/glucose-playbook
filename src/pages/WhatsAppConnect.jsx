@@ -4,7 +4,14 @@ import { supabase } from '../lib/supabase'
 
 export default function WhatsAppConnect() {
   const { user } = useUser()
-  const [state, setState] = useState({ loading: true, error: null, linked: false, code: null, twilioNumber: null, whatsappNumber: null })
+  const [state, setState] = useState({
+    loading: true,
+    error: null,
+    linked: false,
+    code: null,
+    whatsappNumber: null,   // Twilio sandbox number, e.g. "+14155238886"
+    linkedFrom: null,       // user's own number once linked
+  })
 
   useEffect(() => {
     if (!user) return
@@ -15,22 +22,36 @@ export default function WhatsAppConnect() {
     setState(s => ({ ...s, loading: true, error: null }))
     try {
       const { data: { session } } = await supabase.auth.getSession()
-      const token = session?.access_token
+      if (!session?.access_token) throw new Error('Not signed in')
+
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
       const res = await fetch(`${apiUrl}/api/whatsapp-code/${user.id}`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
       })
       if (!res.ok) throw new Error(`Server error ${res.status}`)
       const data = await res.json()
-      setState({ loading: false, error: null, linked: data.linked, code: data.code ?? null, twilioNumber: data.twilio_number ?? null, whatsappNumber: data.whatsapp_number ?? null })
+
+      setState({
+        loading: false,
+        error: null,
+        linked: data.linked,
+        code: data.code ?? null,
+        whatsappNumber: data.whatsapp_number ?? null,
+        linkedFrom: data.linked_from ?? null,
+      })
     } catch (err) {
       setState(s => ({ ...s, loading: false, error: err.message }))
     }
   }
 
-  const phoneNumber = state.twilioNumber?.replace('whatsapp:', '') ?? ''
-  const waLink = phoneNumber ? `https://wa.me/${phoneNumber.replace('+', '')}?text=${encodeURIComponent(state.code ?? '')}` : null
+  const { loading, error, linked, code, whatsappNumber, linkedFrom } = state
+  const waLink = whatsappNumber && code
+    ? `https://wa.me/${whatsappNumber.replace('+', '')}?text=${encodeURIComponent(code)}`
+    : null
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8">
@@ -41,55 +62,75 @@ export default function WhatsAppConnect() {
         </p>
       </div>
 
-      {state.loading && (
+      {loading && (
         <div className="flex items-center justify-center py-16">
           <div className="w-6 h-6 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
         </div>
       )}
 
-      {state.error && (
+      {error && (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-sm text-red-700 dark:text-red-400">
-          {state.error}
+          {error}
           <button onClick={fetchCode} className="ml-2 underline">Retry</button>
         </div>
       )}
 
-      {!state.loading && !state.error && state.linked && (
+      {/* ── Linked state ── */}
+      {!loading && !error && linked && (
         <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-5 space-y-3">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            {/* green tick */}
+            <svg className="w-5 h-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
             <span className="font-semibold text-emerald-800 dark:text-emerald-300">WhatsApp connected</span>
           </div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Linked from <span className="font-mono font-medium">{state.whatsappNumber}</span>
-          </p>
-          <div className="pt-1 border-t border-emerald-200 dark:border-emerald-700">
+          {linkedFrom && (
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              Linked from <span className="font-mono font-medium">{linkedFrom.replace('whatsapp:', '')}</span>
+            </p>
+          )}
+          <div className="pt-2 border-t border-emerald-200 dark:border-emerald-700">
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">What you can send</p>
             <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
               <li>• Food: <span className="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">had oatmeal with banana</span></li>
               <li>• Glucose: <span className="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">glucose 95</span></li>
               <li>• Photo of food or your glucose meter</li>
+              <li>• <span className="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">help</span> for a command reminder</li>
             </ul>
           </div>
         </div>
       )}
 
-      {!state.loading && !state.error && !state.linked && state.code && (
-        <div className="space-y-5">
+      {/* ── Setup flow ── */}
+      {!loading && !error && !linked && code && (
+        <div className="space-y-4">
+          {/* Step 1 — join sandbox */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1">Step 1</p>
-            <p className="text-sm text-slate-700 dark:text-slate-300 font-medium mb-4">
-              Open WhatsApp and message <span className="font-mono font-bold">{phoneNumber || 'the Twilio number'}</span>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1">Step 1 — Activate the sandbox</p>
+            <p className="text-sm text-slate-700 dark:text-slate-300 mb-2">
+              Message <span className="font-mono font-bold">{whatsappNumber || 'the Twilio number'}</span> on WhatsApp and send:
             </p>
+            <div className="font-mono text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200">
+              join &lt;sandbox-keyword&gt;
+            </div>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">
+              Your sandbox keyword is shown in the Twilio console under Messaging → Try it out → WhatsApp.
+            </p>
+          </div>
 
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1">Step 2</p>
-            <p className="text-sm text-slate-700 dark:text-slate-300 font-medium mb-3">Send this code exactly:</p>
+          {/* Step 2 — send code */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1">Step 2 — Send your link code</p>
+            <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">
+              After joining, send this 6-character code to the same number:
+            </p>
             <div className="flex items-center gap-3">
-              <span className="font-mono text-3xl font-bold tracking-[0.2em] text-blue-600 dark:text-blue-400 select-all">
-                {state.code}
+              <span className="font-mono text-3xl font-bold tracking-[0.25em] text-blue-600 dark:text-blue-400 select-all">
+                {code}
               </span>
               <button
-                onClick={() => navigator.clipboard.writeText(state.code)}
+                onClick={() => navigator.clipboard.writeText(code)}
                 className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md px-2 py-1 transition-colors"
               >
                 Copy
@@ -112,8 +153,9 @@ export default function WhatsAppConnect() {
           )}
 
           <p className="text-xs text-slate-400 dark:text-slate-500 text-center">
-            Once you send the code, this page will show your connection status.
-            <button onClick={fetchCode} className="ml-1 underline">Refresh</button>
+            After sending your code, tap{' '}
+            <button onClick={fetchCode} className="underline">Refresh</button>
+            {' '}to confirm the connection.
           </p>
         </div>
       )}

@@ -23,17 +23,19 @@ export async function getWhatsAppCode(req, res) {
     .eq('user_id', userId)
     .single()
 
-  const twilioNumber = process.env.TWILIO_WHATSAPP_NUMBER || ''
+  // Strip "whatsapp:" prefix for display — e.g. "whatsapp:+14155238886" → "+14155238886"
+  const twilioRaw = process.env.TWILIO_WHATSAPP_NUMBER || ''
+  const whatsappNumber = twilioRaw.replace(/^whatsapp:/i, '')
 
   if (existing?.whatsapp_number) {
-    return res.json({ linked: true, whatsapp_number: existing.whatsapp_number, linked_at: existing.linked_at, twilio_number: twilioNumber })
+    return res.json({ linked: true, whatsapp_number: whatsappNumber, linked_from: existing.whatsapp_number, linked_at: existing.linked_at })
   }
 
   if (existing) {
-    return res.json({ linked: false, code: existing.link_code, twilio_number: twilioNumber })
+    return res.json({ linked: false, code: existing.link_code, whatsapp_number: whatsappNumber })
   }
 
   const code = generateCode()
   await supabase.from('user_whatsapp_links').insert({ user_id: userId, link_code: code })
-  return res.json({ linked: false, code, twilio_number: twilioNumber })
+  return res.json({ linked: false, code, whatsapp_number: whatsappNumber })
 }
