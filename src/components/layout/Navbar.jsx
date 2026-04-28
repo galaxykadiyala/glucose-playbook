@@ -1,5 +1,6 @@
 import { useLocation, NavLink } from 'react-router-dom'
 import { useTheme } from '../../context/ThemeContext'
+import { useStint } from '../../context/StintContext'
 
 const titles = {
   '/dashboard':          { title: 'Dashboard',            subtitle: 'Your weekly glucose overview' },
@@ -46,6 +47,30 @@ function ThemeToggle() {
   )
 }
 
+function StintBadge() {
+  const { stints, selectedStintId, setSelectedStintId, hasData } = useStint()
+
+  if (hasData && stints.length > 1) {
+    return (
+      <select
+        value={selectedStintId ?? ''}
+        onChange={e => setSelectedStintId(e.target.value)}
+        className="px-3 py-1.5 rounded-full text-xs font-medium border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 focus:outline-none cursor-pointer"
+      >
+        {stints.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+      </select>
+    )
+  }
+
+  const label = hasData && stints.length === 1 ? stints[0].name : 'Feb–Mar 2026'
+  return (
+    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full text-xs font-medium text-emerald-700 dark:text-emerald-400">
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+      {label}
+    </span>
+  )
+}
+
 export default function Navbar() {
   const { pathname } = useLocation()
   const meta = titles[pathname] || { title: 'Glucose Decode', subtitle: '' }
@@ -59,10 +84,7 @@ export default function Navbar() {
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{meta.subtitle}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full text-xs font-medium text-emerald-700 dark:text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Feb–Mar 2026
-          </span>
+          <StintBadge />
           <ThemeToggle />
         </div>
       </header>
@@ -79,7 +101,7 @@ export default function Navbar() {
             <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">Glucose Decode</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">Feb–Mar 2026</span>
+            <StintBadge />
             <ThemeToggle />
           </div>
         </div>

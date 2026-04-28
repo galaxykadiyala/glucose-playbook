@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { useUser } from '../../context/UserContext'
 
 const mealNavItems = [
   {
@@ -52,6 +53,18 @@ const mealNavItems = [
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    ),
+  },
+]
+
+const dataNavItems = [
+  {
+    to: '/upload',
+    label: 'Upload CSV',
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
       </svg>
     ),
   },
@@ -112,6 +125,7 @@ function NavItem({ item }) {
 }
 
 export default function Sidebar() {
+  const { user, signOut } = useUser()
   return (
     <aside className="hidden md:flex w-60 flex-shrink-0 flex-col bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-700/60 h-screen sticky top-0">
       {/* Logo */}
@@ -138,6 +152,14 @@ export default function Sidebar() {
           {mealNavItems.map(item => <NavItem key={item.to} item={item} />)}
         </ul>
 
+        {/* Data section */}
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 mb-2">
+          Data
+        </p>
+        <ul className="space-y-0.5 mb-4">
+          {dataNavItems.map(item => <NavItem key={item.to} item={item} />)}
+        </ul>
+
         {/* CGM Analytics section */}
         <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 mb-2">
           CGM Analytics
@@ -147,14 +169,19 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer note */}
-      <div className="px-5 py-4 border-t border-slate-100 dark:border-slate-700/60 space-y-1.5">
-        <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-          Built by Galaxy Kadiyala
-        </p>
-        <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed">
-          I wore a CGM for 30 days to understand my own metabolic patterns. Everything here — the spikes, the scores, the recommendations — comes from my actual data. Nothing is generalised.
-        </p>
+      {/* Footer: user + sign out */}
+      <div className="px-5 py-4 border-t border-slate-100 dark:border-slate-700/60 space-y-2">
+        {user && (
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate" title={user.email}>
+            {user.email}
+          </p>
+        )}
+        <button
+          onClick={signOut}
+          className="w-full text-left text-[11px] font-medium text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+        >
+          Sign out
+        </button>
         <p className="text-[10px] text-slate-300 dark:text-slate-600">Not medical advice.</p>
       </div>
     </aside>

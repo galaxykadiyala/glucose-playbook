@@ -5,6 +5,7 @@ import {
   ReferenceLine, ReferenceArea, Legend, Cell,
 } from 'recharts'
 import analytics from '../data/fullAnalytics.json'
+import { useStint } from '../context/StintContext'
 import {
   scoreColor, glucoseColor, tirColor, todColor,
   getOvernightReadings, rollingAvgScore, shortDate, formatDelta,
@@ -391,6 +392,21 @@ function PrioritizedInsightsSection({ prioritized }) {
 
 function DeepAnalyticsTab({ phaseData, comparisonInsights }) {
   const deep = phaseData.deep
+
+  if (!deep) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+          <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Deep analysis not yet available</p>
+        <p className="text-xs text-slate-400 mt-1">Pre-computed analytics pipeline coming soon.</p>
+      </div>
+    )
+  }
+
   const dates = phaseData.daily_summaries.map(d => d.date)
 
   return (
@@ -841,11 +857,28 @@ function DayRow({ day, isSelected, onSelect }) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function DailyIntelligence() {
+  const { stints, selectedStintId, setSelectedStintId, stintPhaseData, hasData } = useStint()
+
   const [activePhase, setActivePhase]   = useState('phase_2')
-  const [activeTab,   setActiveTab]     = useState('overview')  // overview | compare | deep
+  const [activeTab,   setActiveTab]     = useState('overview')
   const [selectedDate, setSelectedDate] = useState(null)
 
-  const phaseData = analytics.datasets[activePhase]
+  // Use live Supabase data when available, fall back to hardcoded
+  const phaseData = hasData && stintPhaseData
+    ? stintPhaseData
+    : analytics.datasets[activePhase]
+
+  // Phase selector options
+  const phaseOptions = hasData && stints.length > 0
+    ? stints.map(s => ({ id: s.id, label: s.name, shortLabel: `${s.start_date} – ${s.end_date}` }))
+    : PHASES
+  const currentPhaseId = hasData ? selectedStintId : activePhase
+  const handlePhaseChange = (id) => {
+    if (hasData) setSelectedStintId(id)
+    else setActivePhase(id)
+    setSelectedDate(null)
+  }
+
   const { daily_summaries, overnight_analysis, spike_list, tod_breakdown,
     best_days, worst_days, text_insights, overnight_summary } = phaseData
 
@@ -854,22 +887,17 @@ export default function DailyIntelligence() {
   const displayDay   = daily_summaries.find(d => d.date === displayDate) || latestDay
   const displayON    = overnight_analysis.find(o => o.date === displayDate)
 
-  // Fetch overnight readings from the raw stint file for the chart
-  // We use the pre-built spike file from fullAnalytics for other data
-  const stintKey   = activePhase === 'phase_2' ? 'stint_2' : 'stint_3'
   const rawReadings = useMemo(() => {
-    // Dynamic import not available at component level — use the chart_data from fullAnalytics
     return phaseData.chart_data.glucose_timeline
       .filter(r => r.t.slice(0, 10) === displayDate || (
         r.t.slice(0, 10) === (() => {
-          const d = new Date(displayDate); d.setDate(d.getDate() - 1);
+          const d = new Date(displayDate); d.setDate(d.getDate() - 1)
           return d.toISOString().slice(0, 10)
         })() && parseInt(r.t.slice(11, 13)) >= 22
       ))
       .map(r => ({ timestamp: r.t, glucose: r.g }))
   }, [displayDate, phaseData])
 
-  const sc = scoreColor(displayDay.score)
   const avgScore = Math.round(daily_summaries.reduce((a, d) => a + d.score, 0) / daily_summaries.length)
   const maxScore = Math.max(...daily_summaries.map(d => d.score))
   const minScore = Math.min(...daily_summaries.map(d => d.score))
@@ -900,15 +928,15 @@ export default function DailyIntelligence() {
         </div>
 
         {(activeTab === 'overview' || activeTab === 'deep') && (
-          <div className="flex gap-2">
-            {PHASES.map(p => (
-              <button key={p.id} onClick={() => { setActivePhase(p.id); setSelectedDate(null) }}
+          <div className="flex gap-2 flex-wrap">
+            {phaseOptions.map(p => (
+              <button key={p.id} onClick={() => handlePhaseChange(p.id)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                  activePhase === p.id
+                  currentPhaseId === p.id
                     ? 'bg-slate-800 text-white'
                     : 'bg-white border border-slate-200 text-slate-600'
                 }`}>
-                {p.label} <span className={activePhase === p.id ? 'text-slate-400' : 'text-slate-400'}>{p.shortLabel}</span>
+                {p.label} <span className="text-slate-400">{p.shortLabel}</span>
               </button>
             ))}
           </div>
