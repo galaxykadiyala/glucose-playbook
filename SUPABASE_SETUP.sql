@@ -47,14 +47,34 @@ create table if not exists public.manual_glucose (
   created_at    timestamptz not null default now()
 );
 
+-- user_whatsapp_links: WhatsApp bot linking table
+create table if not exists public.user_whatsapp_links (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid not null references auth.users(id) on delete cascade,
+  link_code       text not null unique,
+  whatsapp_number text unique,              -- e.g. whatsapp:+12125551234, null until linked
+  linked_at       timestamptz,
+  created_at      timestamptz not null default now()
+);
+
 -- ============================================================
 -- Row Level Security
 -- ============================================================
 
+alter table public.user_whatsapp_links enable row level security;
 alter table public.cgm_stints    enable row level security;
 alter table public.cgm_readings  enable row level security;
 alter table public.meal_logs     enable row level security;
 alter table public.manual_glucose enable row level security;
+
+-- user_whatsapp_links: users can read/manage their own row (backend uses service role key)
+create policy "Users can select own whatsapp link"
+  on public.user_whatsapp_links for select
+  using (auth.uid() = user_id);
+
+create policy "Users can insert own whatsapp link"
+  on public.user_whatsapp_links for insert
+  with check (auth.uid() = user_id);
 
 -- cgm_stints policies
 create policy "Users can select own stints"
@@ -128,5 +148,8 @@ create index if not exists cgm_stints_user_id_idx       on public.cgm_stints(use
 create index if not exists cgm_readings_stint_id_idx    on public.cgm_readings(stint_id);
 create index if not exists cgm_readings_user_id_idx     on public.cgm_readings(user_id);
 create index if not exists cgm_readings_timestamp_idx   on public.cgm_readings(timestamp);
-create index if not exists meal_logs_user_id_idx        on public.meal_logs(user_id);
-create index if not exists manual_glucose_user_id_idx   on public.manual_glucose(user_id);
+create index if not exists meal_logs_user_id_idx           on public.meal_logs(user_id);
+create index if not exists manual_glucose_user_id_idx      on public.manual_glucose(user_id);
+create index if not exists whatsapp_links_user_id_idx      on public.user_whatsapp_links(user_id);
+create index if not exists whatsapp_links_link_code_idx    on public.user_whatsapp_links(link_code);
+create index if not exists whatsapp_links_phone_idx        on public.user_whatsapp_links(whatsapp_number);

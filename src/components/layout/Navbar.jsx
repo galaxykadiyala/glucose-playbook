@@ -22,6 +22,7 @@ const mobileNavItems = [
   { to: '/food',               label: 'Food' },
   { to: '/daily-intelligence', label: 'CGM' },
   { to: '/fix-your-glucose',   label: 'Fix' },
+  { to: '/whatsapp',           label: 'WhatsApp' },
 ]
 
 function ThemeToggle() {

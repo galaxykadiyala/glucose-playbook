@@ -9,6 +9,7 @@ import FoodIntelligence from './pages/FoodIntelligence'
 import DailyIntelligence from './pages/DailyIntelligence'
 import FixYourGlucose from './pages/FixYourGlucose'
 import Upload from './pages/Upload'
+import WhatsAppConnect from './pages/WhatsAppConnect'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import AuthCallback from './pages/AuthCallback'
@@ -49,6 +50,7 @@ export default function App() {
                 <Route path="/daily-intelligence" element={<DailyIntelligence />} />
                 <Route path="/fix-your-glucose"  element={<FixYourGlucose />} />
                 <Route path="/upload"            element={<Upload />} />
+                <Route path="/whatsapp"          element={<WhatsAppConnect />} />
               </Routes>
             </Layout>
           </RequireAuth>
