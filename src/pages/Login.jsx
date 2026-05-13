@@ -1,13 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useUser } from '../context/UserContext'
 
 export default function Login() {
   const navigate = useNavigate()
+  const { user } = useUser()
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
+
+  // Wait for the SIGNED_IN event to land in UserContext before navigating —
+  // navigating immediately after signInWithPassword races RequireAuth, which
+  // reads user=null on the next render and bounces back to /login.
+  useEffect(() => {
+    if (user) navigate('/dashboard', { replace: true })
+  }, [user, navigate])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -17,8 +26,6 @@ export default function Login() {
     if (err) {
       setError(err.message)
       setLoading(false)
-    } else {
-      navigate('/dashboard', { replace: true })
     }
   }
 
@@ -26,7 +33,7 @@ export default function Login() {
     setError('')
     const { error: err } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/dashboard` },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     })
     if (err) setError(err.message)
   }
