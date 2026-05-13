@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useUser } from '../context/UserContext'
 import { supabase } from '../lib/supabase'
 
-const MISSING_API_URL = import.meta.env.PROD && !import.meta.env.VITE_API_URL
 const SANDBOX_KEYWORD = import.meta.env.VITE_TWILIO_SANDBOX_KEYWORD
 
 export default function WhatsAppConnect() {
@@ -19,15 +18,6 @@ export default function WhatsAppConnect() {
   })
 
   useEffect(() => {
-    if (MISSING_API_URL) {
-      setState(s => ({
-        ...s,
-        loading: false,
-        error: 'App is misconfigured: VITE_API_URL is not set. Please contact the administrator.',
-        errorKind: 'config',
-      }))
-      return
-    }
     if (!user) return
     fetchCode()
   }, [user])
@@ -47,12 +37,11 @@ export default function WhatsAppConnect() {
     }
     const accessToken = refreshed.session.access_token
 
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 15000)
 
     try {
-      const res = await fetch(`${apiUrl}/api/whatsapp-code/${user.id}`, {
+      const res = await fetch(`/api/whatsapp-code/${user.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

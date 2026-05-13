@@ -1,4 +1,4 @@
-import { supabase } from './supabase.js'
+import { supabase } from '../_lib/supabase.js'
 
 // Unambiguous chars: no 0/O/1/I/l
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -7,8 +7,13 @@ function generateCode() {
   return Array.from({ length: 6 }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join('')
 }
 
-export async function getWhatsAppCode(req, res) {
-  const { userId } = req.params
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST')
+    return res.status(405).json({ error: 'Method Not Allowed' })
+  }
+
+  const { userId } = req.query
   const token = (req.headers.authorization || '').replace('Bearer ', '')
   if (!token) return res.status(401).json({ error: 'No token' })
 
@@ -23,7 +28,6 @@ export async function getWhatsAppCode(req, res) {
     .eq('user_id', userId)
     .single()
 
-  // Strip "whatsapp:" prefix for display — e.g. "whatsapp:+14155238886" → "+14155238886"
   const twilioRaw = process.env.TWILIO_WHATSAPP_NUMBER || ''
   const whatsappNumber = twilioRaw.replace(/^whatsapp:/i, '')
 

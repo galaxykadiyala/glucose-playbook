@@ -1,13 +1,12 @@
 import twilio from 'twilio'
-import { supabase } from './supabase.js'
-import { parseFoodText, parseFoodImage, parseGlucoseText, parseGlucoseImage, classifyIntent } from './claude.js'
-import { downloadTwilioMedia } from './media.js'
+import { supabase } from '../_lib/supabase.js'
+import { parseFoodText, parseFoodImage, parseGlucoseText, parseGlucoseImage, classifyIntent } from '../_lib/claude.js'
+import { downloadTwilioMedia } from '../_lib/media.js'
 
 const LINK_CODE_RE = /^[A-Z0-9]{6}$/i
 const GLUCOSE_PATTERN = /\b(?:glucose|blood sugar|sugar|bs|bg)\s*[:\s]\s*(\d{2,3})\b/i
 const FOOD_KEYWORDS = /\b(?:ate|had|eat|meal|food|drink|drank|breakfast|lunch|dinner|snack|coffee|tea)\b/i
 
-// Mask phone numbers in logs — keep country code + last 2 digits only.
 function maskNumber(n) {
   if (!n) return n
   return n.replace(/(\+?\d{1,3})\d+(\d{2})/, '$1***$2')
@@ -15,6 +14,11 @@ function maskNumber(n) {
 
 function twiml(text) {
   return `<?xml version="1.0" encoding="UTF-8"?><Response><Message>${text}</Message></Response>`
+}
+
+function sendTwiml(res, xml) {
+  res.setHeader('Content-Type', 'text/xml')
+  return res.status(200).send(xml)
 }
 
 async function getUserByWhatsApp(whatsappNumber) {
@@ -115,12 +119,18 @@ async function logGlucose(userId, parsed) {
   return { ok: true }
 }
 
-export async function handleWebhook(req, res) {
-  // Build URL from forwarded headers — req.protocol/host alone return the
-  // internal hop on Railway, which won't match what Twilio signed.
-  const proto = req.headers['x-forwarded-proto'] || req.protocol
-  const host = req.headers['x-forwarded-host'] || req.get('host')
-  const url = `${proto}://${host}${req.originalUrl}`
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST')
+    return res.status(405).send('Method Not Allowed')
+  }
+
+  // Build the public URL Twilio signed against. Vercel terminates TLS at the
+  // edge — req.url is just the path, so we synthesize the full URL from
+  // forwarded headers.
+  const proto = req.headers['x-forwarded-proto'] || 'https'
+  const host = req.headers['x-forwarded-host'] || req.headers['host']
+  const url = `${proto}://${host}${req.url}`
   const signature = req.headers['x-twilio-signature'] || ''
 
   if (process.env.SKIP_TWILIO_VALIDATION === 'true') {
@@ -136,42 +146,37 @@ export async function handleWebhook(req, res) {
       console.warn('Twilio signature invalid', {
         computedUrl: url,
         hasSignature: !!signature,
-        bodyKeys: Object.keys(req.body),
+        bodyKeys: Object.keys(req.body || {}),
       })
       return res.status(403).send('Forbidden')
     }
   }
 
-  const body = (req.body.Body || '').trim()
-  const from = req.body.From || ''
-  const numMedia = parseInt(req.body.NumMedia || '0', 10)
-  const mediaUrl = req.body.MediaUrl0
+  const body = (req.body?.Body || '').trim()
+  const from = req.body?.From || ''
+  const numMedia = parseInt(req.body?.NumMedia || '0', 10)
+  const mediaUrl = req.body?.MediaUrl0
 
   console.log('Webhook hit:', { from: maskNumber(from), bodyLen: body.length, numMedia })
 
-  res.type('text/xml')
-
-  // Link code
   if (LINK_CODE_RE.test(body)) {
-    return res.send(await handleLinkCode(body, from))
+    return sendTwiml(res, await handleLinkCode(body, from))
   }
 
-  // Require linked account for everything else
   const userLink = await getUserByWhatsApp(from)
   if (!userLink) {
-    return res.send(twiml(
+    return sendTwiml(res, twiml(
       'Your WhatsApp is not linked. Open the Glucose Decode app, go to WhatsApp Connect, and send the 6-character code shown there.'
     ))
   }
   const userId = userLink.user_id
 
   if (/^help$/i.test(body)) {
-    return res.send(twiml(
+    return sendTwiml(res, twiml(
       'What I can log:\n• Food: "had rice and dal"\n• Glucose: "glucose 110"\n• Photo of food or your glucose meter'
     ))
   }
 
-  // Image handling
   if (numMedia > 0 && mediaUrl) {
     try {
       const { base64, mimeType } = await downloadTwilioMedia(
@@ -187,8 +192,8 @@ export async function handleWebhook(req, res) {
         })
         if (parsed?.glucose_value) {
           const result = await logGlucose(userId, parsed)
-          if (!result.ok) return res.send(twiml('Read your glucose but couldn\'t save it. Please try again.'))
-          return res.send(twiml(`Logged glucose: ${parsed.glucose_value} mg/dL${parsed.context ? ` (${parsed.context})` : ''} ✓`))
+          if (!result.ok) return sendTwiml(res, twiml('Read your glucose but couldn\'t save it. Please try again.'))
+          return sendTwiml(res, twiml(`Logged glucose: ${parsed.glucose_value} mg/dL${parsed.context ? ` (${parsed.context})` : ''} ✓`))
         }
       }
 
@@ -198,33 +203,31 @@ export async function handleWebhook(req, res) {
       })
       if (parsed?.food_items) {
         const result = await logFood(userId, parsed)
-        if (!result.ok) return res.send(twiml('Read your meal but couldn\'t save it. Please try again.'))
-        return res.send(twiml(`Logged meal: ${parsed.food_items}${parsed.notes ? ` — ${parsed.notes}` : ''} ✓`))
+        if (!result.ok) return sendTwiml(res, twiml('Read your meal but couldn\'t save it. Please try again.'))
+        return sendTwiml(res, twiml(`Logged meal: ${parsed.food_items}${parsed.notes ? ` — ${parsed.notes}` : ''} ✓`))
       }
 
-      return res.send(twiml("Couldn't identify food or glucose in that image. Try a clearer photo or describe it in text."))
+      return sendTwiml(res, twiml("Couldn't identify food or glucose in that image. Try a clearer photo or describe it in text."))
     } catch (err) {
       console.error('Media error:', err.message)
-      return res.send(twiml('Error processing the image. Please try again.'))
+      return sendTwiml(res, twiml('Error processing the image. Please try again.'))
     }
   }
 
-  // Quick glucose pattern: "glucose 95" or "bg: 110"
   const glucoseMatch = body.match(GLUCOSE_PATTERN)
   if (glucoseMatch) {
     const value = parseInt(glucoseMatch[1], 10)
     const result = await logGlucose(userId, { glucose_value: value, context: null })
-    if (!result.ok) return res.send(twiml('Couldn\'t save your glucose reading. Please try again.'))
-    return res.send(twiml(`Logged glucose: ${value} mg/dL ✓`))
+    if (!result.ok) return sendTwiml(res, twiml('Couldn\'t save your glucose reading. Please try again.'))
+    return sendTwiml(res, twiml(`Logged glucose: ${value} mg/dL ✓`))
   }
 
-  // Claude intent + parse
   let intent = 'unknown'
   try {
     intent = await classifyIntent(body)
   } catch (err) {
     console.error('classifyIntent failed', { err: err.message })
-    return res.send(twiml('Having trouble understanding right now. Please try again in a moment.'))
+    return sendTwiml(res, twiml('Having trouble understanding right now. Please try again in a moment.'))
   }
 
   if (intent === 'glucose') {
@@ -234,8 +237,8 @@ export async function handleWebhook(req, res) {
     })
     if (parsed?.glucose_value) {
       const result = await logGlucose(userId, parsed)
-      if (!result.ok) return res.send(twiml('Couldn\'t save your glucose reading. Please try again.'))
-      return res.send(twiml(`Logged glucose: ${parsed.glucose_value} mg/dL${parsed.context ? ` (${parsed.context})` : ''} ✓`))
+      if (!result.ok) return sendTwiml(res, twiml('Couldn\'t save your glucose reading. Please try again.'))
+      return sendTwiml(res, twiml(`Logged glucose: ${parsed.glucose_value} mg/dL${parsed.context ? ` (${parsed.context})` : ''} ✓`))
     }
   }
 
@@ -246,12 +249,12 @@ export async function handleWebhook(req, res) {
     })
     if (parsed?.food_items) {
       const result = await logFood(userId, parsed)
-      if (!result.ok) return res.send(twiml('Couldn\'t save your meal. Please try again.'))
-      return res.send(twiml(`Logged meal: ${parsed.food_items}${parsed.notes ? ` — ${parsed.notes}` : ''} ✓`))
+      if (!result.ok) return sendTwiml(res, twiml('Couldn\'t save your meal. Please try again.'))
+      return sendTwiml(res, twiml(`Logged meal: ${parsed.food_items}${parsed.notes ? ` — ${parsed.notes}` : ''} ✓`))
     }
   }
 
-  return res.send(twiml(
+  return sendTwiml(res, twiml(
     "Not sure what to log. Try:\n• \"had oatmeal and eggs\"\n• \"glucose 95\"\n• Send a photo of your food or meter"
   ))
 }
