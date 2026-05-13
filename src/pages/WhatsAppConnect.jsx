@@ -18,15 +18,18 @@ export default function WhatsAppConnect() {
   })
 
   useEffect(() => {
-    if (!user) return
+    if (!user?.id) return
     fetchCode()
-  }, [user])
+  }, [user?.id])
 
   async function fetchCode() {
     setState(s => ({ ...s, loading: true, error: null, errorKind: null }))
 
-    const { data: refreshed, error: refreshErr } = await supabase.auth.refreshSession()
-    if (refreshErr || !refreshed?.session?.access_token) {
+    // getSession() auto-refreshes if the token is near expiry (autoRefreshToken
+    // is on by default) but does NOT fire a TOKEN_REFRESHED event on every
+    // call — unlike refreshSession(), which would loop us via UserContext.
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.access_token) {
       setState(s => ({
         ...s,
         loading: false,
@@ -35,7 +38,7 @@ export default function WhatsAppConnect() {
       }))
       return
     }
-    const accessToken = refreshed.session.access_token
+    const accessToken = session.access_token
 
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 15000)
