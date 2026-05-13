@@ -1,54 +1,135 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useUser } from '../context/UserContext'
 import { supabase } from '../lib/supabase'
+
+const MISSING_API_URL = import.meta.env.PROD && !import.meta.env.VITE_API_URL
+const SANDBOX_KEYWORD = import.meta.env.VITE_TWILIO_SANDBOX_KEYWORD
 
 export default function WhatsAppConnect() {
   const { user } = useUser()
   const [state, setState] = useState({
     loading: true,
     error: null,
+    errorKind: null,
     linked: false,
     code: null,
-    whatsappNumber: null,   // Twilio sandbox number, e.g. "+14155238886"
-    linkedFrom: null,       // user's own number once linked
+    whatsappNumber: null,
+    linkedFrom: null,
   })
 
   useEffect(() => {
+    if (MISSING_API_URL) {
+      setState(s => ({
+        ...s,
+        loading: false,
+        error: 'App is misconfigured: VITE_API_URL is not set. Please contact the administrator.',
+        errorKind: 'config',
+      }))
+      return
+    }
     if (!user) return
     fetchCode()
   }, [user])
 
   async function fetchCode() {
-    setState(s => ({ ...s, loading: true, error: null }))
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session?.access_token) throw new Error('Not signed in')
+    setState(s => ({ ...s, loading: true, error: null, errorKind: null }))
 
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+    const { data: refreshed, error: refreshErr } = await supabase.auth.refreshSession()
+    if (refreshErr || !refreshed?.session?.access_token) {
+      setState(s => ({
+        ...s,
+        loading: false,
+        error: 'Your session has expired. Please sign in again.',
+        errorKind: 'auth',
+      }))
+      return
+    }
+    const accessToken = refreshed.session.access_token
+
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
+
+    try {
       const res = await fetch(`${apiUrl}/api/whatsapp-code/${user.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
+          'Authorization': `Bearer ${accessToken}`,
         },
+        signal: controller.signal,
       })
-      if (!res.ok) throw new Error(`Server error ${res.status}`)
-      const data = await res.json()
+      clearTimeout(timeoutId)
 
+      if (res.status === 401) {
+        setState(s => ({
+          ...s,
+          loading: false,
+          error: 'Your session has expired. Please sign in again.',
+          errorKind: 'auth',
+        }))
+        return
+      }
+      if (res.status >= 500) {
+        setState(s => ({
+          ...s,
+          loading: false,
+          error: `Server error (${res.status}). Please try again in a moment.`,
+          errorKind: 'server',
+        }))
+        return
+      }
+      if (!res.ok) {
+        setState(s => ({
+          ...s,
+          loading: false,
+          error: `Request failed (${res.status}).`,
+          errorKind: 'other',
+        }))
+        return
+      }
+
+      const data = await res.json()
       setState({
         loading: false,
         error: null,
+        errorKind: null,
         linked: data.linked,
         code: data.code ?? null,
         whatsappNumber: data.whatsapp_number ?? null,
         linkedFrom: data.linked_from ?? null,
       })
     } catch (err) {
-      setState(s => ({ ...s, loading: false, error: err.message }))
+      clearTimeout(timeoutId)
+      if (err.name === 'AbortError') {
+        setState(s => ({
+          ...s,
+          loading: false,
+          error: 'Request timed out. Please check your connection and try again.',
+          errorKind: 'timeout',
+        }))
+        return
+      }
+      if (err instanceof TypeError) {
+        setState(s => ({
+          ...s,
+          loading: false,
+          error: "Can't reach the server. Check your connection and try again.",
+          errorKind: 'network',
+        }))
+        return
+      }
+      setState(s => ({
+        ...s,
+        loading: false,
+        error: err.message || 'Something went wrong.',
+        errorKind: 'other',
+      }))
     }
   }
 
-  const { loading, error, linked, code, whatsappNumber, linkedFrom } = state
+  const { loading, error, errorKind, linked, code, whatsappNumber, linkedFrom } = state
   const waLink = whatsappNumber && code
     ? `https://wa.me/${whatsappNumber.replace('+', '')}?text=${encodeURIComponent(code)}`
     : null
@@ -70,8 +151,15 @@ export default function WhatsAppConnect() {
 
       {error && (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-sm text-red-700 dark:text-red-400">
-          {error}
-          <button onClick={fetchCode} className="ml-2 underline">Retry</button>
+          <p>{error}</p>
+          <div className="mt-2 flex items-center gap-3">
+            {errorKind === 'auth' && (
+              <Link to="/login" className="underline font-medium">Go to sign in</Link>
+            )}
+            {errorKind !== 'auth' && errorKind !== 'config' && (
+              <button onClick={fetchCode} className="underline">Retry</button>
+            )}
+          </div>
         </div>
       )}
 
@@ -79,7 +167,6 @@ export default function WhatsAppConnect() {
       {!loading && !error && linked && (
         <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-5 space-y-3">
           <div className="flex items-center gap-2">
-            {/* green tick */}
             <svg className="w-5 h-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
@@ -111,12 +198,28 @@ export default function WhatsAppConnect() {
             <p className="text-sm text-slate-700 dark:text-slate-300 mb-2">
               Message <span className="font-mono font-bold">{whatsappNumber || 'the Twilio number'}</span> on WhatsApp and send:
             </p>
-            <div className="font-mono text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200">
-              join &lt;sandbox-keyword&gt;
-            </div>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">
-              Your sandbox keyword is shown in the Twilio console under Messaging → Try it out → WhatsApp.
-            </p>
+            {SANDBOX_KEYWORD ? (
+              <div className="flex items-center gap-3">
+                <code className="font-mono text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 select-all">
+                  join {SANDBOX_KEYWORD}
+                </code>
+                <button
+                  onClick={() => navigator.clipboard.writeText(`join ${SANDBOX_KEYWORD}`)}
+                  className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md px-2 py-1 transition-colors"
+                >
+                  Copy
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="font-mono text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200">
+                  join &lt;sandbox-keyword&gt;
+                </div>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">
+                  Your sandbox keyword is shown in the Twilio console under Messaging → Try it out → WhatsApp.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Step 2 — send code */}
