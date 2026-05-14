@@ -19,36 +19,101 @@ if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 const cgmData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src/data/cgmData.json'), 'utf8'))
 const readings = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src/data/glucoseReadings.json'), 'utf8'))
+const stint2 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src/data/stint_2.json'), 'utf8'))
+const stint3 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src/data/stint_3.json'), 'utf8'))
+
+async function ensureStint(stint) {
+  const { data: existing, error: findErr } = await supabase
+    .from('cgm_stints')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('name', stint.name)
+    .limit(1)
+  if (findErr) throw findErr
+  if (existing.length) return { id: existing[0].id, inserted: false }
+
+  const { data, error } = await supabase.from('cgm_stints').insert([{ ...stint, user_id: userId }]).select('id').single()
+  if (error) throw error
+  return { id: data.id, inserted: true }
+}
+
+async function insertReadings(stintId, rows) {
+  const { data: existing, error: readErr } = await supabase
+    .from('cgm_readings')
+    .select('timestamp')
+    .eq('stint_id', stintId)
+  if (readErr) throw readErr
+  const existingSet = new Set(existing.map((r) => r.timestamp))
+  const inserts = rows.filter((r) => !existingSet.has(r.timestamp))
+  if (!inserts.length) return 0
+  const { error } = await supabase.from('cgm_readings').insert(inserts.map((r) => ({ ...r, stint_id: stintId, user_id: userId })))
+  if (error) throw error
+  return inserts.length
+}
+
+async function insertMeals() {
+  const notes = cgmData.meals.map((m) => `seed:${m.id}`)
+  const { data: existing, error: existErr } = await supabase
+    .from('meal_logs')
+    .select('notes')
+    .eq('user_id', userId)
+    .in('notes', notes)
+  if (existErr) throw existErr
+  const existingNotes = new Set(existing.map((m) => m.notes))
+
+  const rows = cgmData.meals
+    .filter((m) => !existingNotes.has(`seed:${m.id}`))
+    .map((m) => ({
+      user_id: userId,
+      timestamp: m.datetime,
+      food_items: m.foods.map((f) => f.name).join(', '),
+      notes: `seed:${m.id}`,
+      source: 'migration',
+      meal_type: m.meal_type || null,
+      day_of_week: m.day_of_week || null,
+      foods: m.foods || [],
+      pre_meal: m.pre_meal || [],
+      post_meal: m.post_meal || [],
+      tags: m.tags || [],
+    }))
+
+  if (!rows.length) return 0
+  const { error } = await supabase.from('meal_logs').insert(rows)
+  if (error) throw error
+  return rows.length
+}
 
 async function main() {
-  const dates = readings.sampleDay.map((r) => r.time).sort()
+  const dates = readings.sampleDay.readings.map((r) => r.time).sort()
   const start = dates[0]
   const end = dates[dates.length - 1]
-  console.log(`[${apply ? 'APPLY' : 'DRY-RUN'}] Seed legacy glucose (${start} to ${end})`)
+  console.log(`[${apply ? 'APPLY' : 'DRY-RUN'}] Seed glucose (${start} to ${end})`)
 
-  const stints = [{ name: `Legacy Glucose ${start} to ${end}`, start_date: start.slice(0,10), end_date: end.slice(0,10), sensor_type: 'Legacy', user_id: userId }]
-  const mealLogs = cgmData.meals.map((m) => ({ user_id: userId, timestamp: m.datetime, food_items: m.foods.map((f) => f.name).join(', '), notes: m.notes || null, source: 'migration', meal_type: m.meal_type || null, day_of_week: m.day_of_week || null, foods: m.foods || [], pre_meal: m.pre_meal || [], post_meal: m.post_meal || [], tags: m.tags || [] }))
+  const legacyStint = { name: `Legacy Glucose ${start} to ${end}`, start_date: start.slice(0, 10), end_date: end.slice(0, 10), sensor_type: 'Legacy' }
+  const sampleRows = readings.sampleDay.readings.map((r) => ({ timestamp: r.time, glucose_value: r.value, event_label: null }))
 
-  const readingRows = readings.sampleDay.map((r) => ({ user_id: userId, timestamp: r.time, glucose_value: r.value, event_label: null }))
+  const stintRows = [
+    { name: 'Stint 2', start_date: stint2.metadata.startDate, end_date: stint2.metadata.endDate, sensor_type: 'Freestyle Libre', rows: stint2.readings.map((r) => ({ timestamp: r.timestamp, glucose_value: r.value, event_label: null })) },
+    { name: 'Stint 3', start_date: stint3.metadata.startDate, end_date: stint3.metadata.endDate, sensor_type: 'Freestyle Libre', rows: stint3.readings.map((r) => ({ timestamp: r.timestamp, glucose_value: r.value, event_label: null })) },
+  ]
 
-  console.log(`Plan: 1 stint, ${readingRows.length} readings, ${mealLogs.length} meal_logs`)
+  console.log(`Plan: legacy + ${stintRows.length} stints, ${sampleRows.length + stintRows.reduce((a,s)=>a+s.rows.length,0)} readings, ${cgmData.meals.length} meal_logs`)
   if (!apply) return
 
-  let insertedStints = 0, insertedReadings = 0, insertedMeals = 0
-  const { data: stintData, error: stintErr } = await supabase.from('cgm_stints').insert(stints).select('id')
-  if (stintErr) throw stintErr
-  insertedStints += stintData.length
-  const stintId = stintData[0].id
+  let insertedStints = 0
+  let insertedReadings = 0
 
-  const readingsWithStint = readingRows.map((r) => ({ ...r, stint_id: stintId }))
-  const { error: readErr } = await supabase.from('cgm_readings').insert(readingsWithStint)
-  if (readErr) throw readErr
-  insertedReadings += readingsWithStint.length
+  const legacy = await ensureStint(legacyStint)
+  if (legacy.inserted) insertedStints += 1
+  insertedReadings += await insertReadings(legacy.id, sampleRows)
 
-  const { error: mealErr } = await supabase.from('meal_logs').insert(mealLogs)
-  if (mealErr) throw mealErr
-  insertedMeals += mealLogs.length
+  for (const s of stintRows) {
+    const ensured = await ensureStint({ name: s.name, start_date: s.start_date, end_date: s.end_date, sensor_type: s.sensor_type })
+    if (ensured.inserted) insertedStints += 1
+    insertedReadings += await insertReadings(ensured.id, s.rows)
+  }
 
+  const insertedMeals = await insertMeals()
   console.log(`Inserted ${insertedStints} stints, ${insertedReadings} readings, ${insertedMeals} meal_logs.`)
 }
 

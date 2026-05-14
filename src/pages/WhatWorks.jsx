@@ -1,10 +1,10 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
 import { analyseDataset, detectStabilisers } from '../utils/insightsEngine'
+import { useUser } from '../context/UserContext'
 import { buildMealsForUser } from '../lib/mealAdapter'
 import Card, { CardHeader } from '../components/ui/Card'
 
-const meals = cgmData.meals
 
 // ─── Sparkline ────────────────────────────────────────────────────────────────
 
@@ -201,10 +201,27 @@ function StackingBar({ label, spikeRate, count, color }) {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
-const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000'
-
 export default function WhatWorks() {
-  const { strategy_effectiveness: se } = useMemo(() => analyseDataset(meals), [])
+  const { user } = useUser()
+  const [meals, setMeals] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!user) return
+    let cancelled = false
+    setError(null)
+    setMeals(null)
+    buildMealsForUser(user.id)
+      .then((m) => { if (!cancelled) setMeals(m) })
+      .catch((e) => { if (!cancelled) setError(e) })
+    return () => { cancelled = true }
+  }, [user])
+
+  if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
+
+  const { strategy_effectiveness: se } = useMemo(() => analyseDataset(meals), [meals])
 
   // Resolve strategy stats from engine
   const getStats = (key) => se.find(s => s.key === key) || { spikeRate: 0, avgPeak: 0, avgDelta: 0, mealCount: 0, mealIds: [] }
