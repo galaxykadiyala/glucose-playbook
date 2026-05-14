@@ -37,6 +37,14 @@ async function ensureStint(stint) {
   return { id: data.id, inserted: true }
 }
 
+
+async function batchInsert(table, rows, size = 500) {
+  for (let i = 0; i < rows.length; i += size) {
+    const { error } = await supabase.from(table).insert(rows.slice(i, i + size))
+    if (error) throw error
+  }
+}
+
 async function insertReadings(stintId, rows) {
   const { data: existing, error: readErr } = await supabase
     .from('cgm_readings')
@@ -46,8 +54,7 @@ async function insertReadings(stintId, rows) {
   const existingSet = new Set(existing.map((r) => r.timestamp))
   const inserts = rows.filter((r) => !existingSet.has(r.timestamp))
   if (!inserts.length) return 0
-  const { error } = await supabase.from('cgm_readings').insert(inserts.map((r) => ({ ...r, stint_id: stintId, user_id: userId })))
-  if (error) throw error
+  await batchInsert('cgm_readings', inserts.map((r) => ({ ...r, stint_id: stintId, user_id: userId })))
   return inserts.length
 }
 
@@ -78,8 +85,7 @@ async function insertMeals() {
     }))
 
   if (!rows.length) return 0
-  const { error } = await supabase.from('meal_logs').insert(rows)
-  if (error) throw error
+  await batchInsert('meal_logs', rows)
   return rows.length
 }
 
@@ -92,8 +98,8 @@ async function main() {
   const sampleRows = readings.sampleDay.readings.map((r) => ({ timestamp: `${day}T${r.time}:00Z`, glucose_value: r.value, event_label: null }))
 
   const stintRows = [
-    { name: 'Stint 2', start_date: stint2.metadata.startDate, end_date: stint2.metadata.endDate, sensor_type: 'Freestyle Libre', rows: stint2.readings.map((r) => ({ timestamp: r.timestamp, glucose_value: r.value, event_label: null })) },
-    { name: 'Stint 3', start_date: stint3.metadata.startDate, end_date: stint3.metadata.endDate, sensor_type: 'Freestyle Libre', rows: stint3.readings.map((r) => ({ timestamp: r.timestamp, glucose_value: r.value, event_label: null })) },
+    { name: 'Stint 2', start_date: stint2.metadata.date_range.start, end_date: stint2.metadata.date_range.end, sensor_type: 'Ultrahuman', rows: stint2.readings.map((r) => ({ timestamp: `${r.timestamp}Z`, glucose_value: r.glucose, event_label: null })) },
+    { name: 'Stint 3', start_date: stint3.metadata.date_range.start, end_date: stint3.metadata.date_range.end, sensor_type: 'Ultrahuman', rows: stint3.readings.map((r) => ({ timestamp: `${r.timestamp}Z`, glucose_value: r.glucose, event_label: null })) },
   ]
 
   console.log(`Plan: legacy + ${stintRows.length} stints, ${sampleRows.length + stintRows.reduce((a,s)=>a+s.rows.length,0)} readings, ${cgmData.meals.length} meal_logs`)
