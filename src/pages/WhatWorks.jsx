@@ -1,10 +1,10 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
-import cgmData from '../data/cgmData.json'
 import { analyseDataset, detectStabilisers } from '../utils/insightsEngine'
+import { useUser } from '../context/UserContext'
+import { buildMealsForUser } from '../lib/mealAdapter'
 import Card, { CardHeader } from '../components/ui/Card'
 
-const meals = cgmData.meals
 
 // ─── Sparkline ────────────────────────────────────────────────────────────────
 
@@ -202,7 +202,28 @@ function StackingBar({ label, spikeRate, count, color }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function WhatWorks() {
-  const { strategy_effectiveness: se } = useMemo(() => analyseDataset(meals), [])
+  const { user } = useUser()
+  const [meals, setMeals] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!user) return
+    let cancelled = false
+    setError(null)
+    setMeals(null)
+    buildMealsForUser(user.id)
+      .then((m) => { if (!cancelled) setMeals(m) })
+      .catch((e) => { if (!cancelled) setError(e) })
+    return () => { cancelled = true }
+  }, [user])
+
+  const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
+  const se = insights?.strategy_effectiveness || []
+
+  if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
+
 
   // Resolve strategy stats from engine
   const getStats = (key) => se.find(s => s.key === key) || { spikeRate: 0, avgPeak: 0, avgDelta: 0, mealCount: 0, mealIds: [] }
@@ -273,16 +294,16 @@ export default function WhatWorks() {
       subtitle: 'Brown rice + chicken + chia seeds. Only difference: post-meal walk.',
       insight: '15 min walk after eating cut delta by 20 mg/dL and prevented the spike entirely.',
       diffLabel: '-20 mg/dL delta',
-      before: meals.find(m => m.id === 'meal_007'),
-      after:  meals.find(m => m.id === 'meal_005'),
+      before: meals.find(m => m.seedId === 'meal_007'),
+      after:  meals.find(m => m.seedId === 'meal_005'),
     },
     {
       title: 'Strategy vs No Strategy — White Rice',
       subtitle: 'White rice with fish curry. Strategies: chia seeds + 15 min walk vs nothing.',
       insight: 'Identical high-GI food (GI 73) — chia + walk reduced peak by 35 mg/dL, prevented spike.',
       diffLabel: '-35 mg/dL peak',
-      before: meals.find(m => m.id === 'meal_010'),
-      after:  meals.find(m => m.id === 'meal_015'),
+      before: meals.find(m => m.seedId === 'meal_010'),
+      after:  meals.find(m => m.seedId === 'meal_015'),
     },
   ]
 

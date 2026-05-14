@@ -33,6 +33,12 @@ create table if not exists public.meal_logs (
   food_items  text not null,
   notes       text,
   source      text not null default 'manual',
+  meal_type   text,
+  day_of_week text,
+  foods       jsonb default '[]'::jsonb,
+  pre_meal    jsonb default '[]'::jsonb,
+  post_meal   jsonb default '[]'::jsonb,
+  tags        jsonb default '[]'::jsonb,
   created_at  timestamptz not null default now()
 );
 

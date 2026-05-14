@@ -1,22 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis,
   CartesianGrid, Tooltip, ReferenceLine, ReferenceArea,
 } from 'recharts'
-import cgmData from '../data/cgmData.json'
 import {
   analyseDataset,
   deltaColor,
   severityMeta,
   giLabel,
 } from '../utils/insightsEngine'
+import { useUser } from '../context/UserContext'
+import { buildMealsForUser } from '../lib/mealAdapter'
 import { getZone, ZONE_COLORS } from '../utils/glucoseZones'
 
 // ─── Derived data ─────────────────────────────────────────────────────────────
 
-function useInsights() {
-  return useMemo(() => analyseDataset(cgmData.meals), [])
-}
 
 // ─── Stat card ────────────────────────────────────────────────────────────────
 
@@ -307,7 +305,27 @@ function MealRow({ meal, insight }) {
 // ─── Main page ─────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
-  const insights = useInsights()
+  const { user } = useUser()
+  const [meals, setMeals] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!user) return
+    let cancelled = false
+    setError(null)
+    setMeals(null)
+    buildMealsForUser(user.id)
+      .then((m) => { if (!cancelled) setMeals(m) })
+      .catch((e) => { if (!cancelled) setError(e) })
+    return () => { cancelled = true }
+  }, [user])
+
+  const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
+
+  if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
+
   const { stats, patterns, strategy_effectiveness, top_spike_causes, food_rankings } = insights
 
   const bestStrategy = strategy_effectiveness
@@ -363,7 +381,7 @@ export default function Dashboard() {
         <div className="mb-4">
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Glucose Decode</h1>
           <p className="text-sm text-slate-500 mt-1">
-            {cgmData.metadata.total_meals} meals · {cgmData.metadata.date_range.start} → {cgmData.metadata.date_range.end}
+            {meals.length} meals · {meals[0]?.date ?? '—'} → {meals[meals.length - 1]?.date ?? '—'}
           </p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -373,7 +391,7 @@ export default function Dashboard() {
 
       {/* ── Timeline ── */}
       <div className="mb-6">
-        <GlucoseTimeline meals={cgmData.meals} insights={insights} />
+        <GlucoseTimeline meals={meals} insights={insights} />
       </div>
 
       {/* ── Three-column section ── */}
@@ -510,7 +528,7 @@ export default function Dashboard() {
             <span className="text-[10px] text-slate-400 font-medium w-14 text-right">Status</span>
           </div>
           <div className="max-h-[420px] overflow-y-auto pr-1">
-            {cgmData.meals.map((meal, i) => (
+            {meals.map((meal, i) => (
               <MealRow key={meal.id} meal={meal} insight={insights.meal_insights[i]} />
             ))}
           </div>

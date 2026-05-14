@@ -1,7 +1,8 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ResponsiveContainer, LineChart, Line, ReferenceLine } from 'recharts'
-import cgmData from '../data/cgmData.json'
 import { detectCauses, severityMeta, deltaColor } from '../utils/insightsEngine'
+import { useUser } from '../context/UserContext'
+import { buildMealsForUser } from '../lib/mealAdapter'
 
 // ─── Static cause definitions ─────────────────────────────────────────────────
 // spikeIds   → meals that demonstrate the spike pattern for this cause
@@ -80,9 +81,9 @@ const CAUSE_DEFS = [
 
 // ─── Data hooks ───────────────────────────────────────────────────────────────
 
-function useCauses() {
+function useCauses(meals) {
   return useMemo(() => {
-    const meals = cgmData.meals
+    if (!meals) return null
     const spikedMeals = meals.filter(m => m.spike)
 
     return CAUSE_DEFS.map(def => {
@@ -99,11 +100,11 @@ function useCauses() {
         frequency,
         mealCount:     matchedSpikes.length,
         avgDelta,
-        spikedMeals:   def.spikeIds.map(id => meals.find(m => m.id === id)).filter(Boolean),
-        controlledMeal: def.controlId ? meals.find(m => m.id === def.controlId) : null,
+        spikedMeals:   def.spikeIds.map(id => meals.find(m => m.seedId === id)).filter(Boolean),
+        controlledMeal: def.controlId ? meals.find(m => m.seedId === def.controlId) : null,
       }
     })
-  }, [])
+  }, [meals])
 }
 
 // ─── Sparkline ────────────────────────────────────────────────────────────────
@@ -332,16 +333,16 @@ function CauseSection({ cause }) {
 
 // ─── Ranking overview bar ─────────────────────────────────────────────────────
 
-function RankingBar({ causes }) {
+function RankingBar({ causes, meals }) {
   const max = Math.max(...causes.map(c => c.frequency))
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-card p-5 mb-6">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h2 className="text-sm font-semibold text-slate-900">Causes Ranked by Frequency</h2>
-          <p className="text-xs text-slate-400 mt-0.5">% of your {cgmData.meals.filter(m=>m.spike).length} spike events where each cause was active</p>
+          <p className="text-xs text-slate-400 mt-0.5">% of your {meals.filter(m=>m.spike).length} spike events where each cause was active</p>
         </div>
-        <span className="text-xs text-slate-400">{cgmData.meals.length} meals analysed</span>
+        <span className="text-xs text-slate-400">{meals.length} meals analysed</span>
       </div>
       <div className="space-y-3">
         {causes.map(c => (
@@ -375,8 +376,7 @@ function RankingBar({ causes }) {
 
 // ─── Summary stats ────────────────────────────────────────────────────────────
 
-function SummaryStats({ causes }) {
-  const meals      = cgmData.meals
+function SummaryStats({ causes, meals }) {
   const spiked     = meals.filter(m => m.spike)
   const topCause   = causes[0]
   const worstMeal  = [...spiked].sort((a, b) => b.glucose.delta - a.glucose.delta)[0]
@@ -428,12 +428,31 @@ function SummaryStats({ causes }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function SpikeCauses() {
-  const causes = useCauses()
+  const { user } = useUser()
+  const [loadedMeals, setLoadedMeals] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!user) return
+    let cancelled = false
+    setError(null)
+    setLoadedMeals(null)
+    buildMealsForUser(user.id)
+      .then((m) => { if (!cancelled) setLoadedMeals(m) })
+      .catch((e) => { if (!cancelled) setError(e) })
+    return () => { cancelled = true }
+  }, [user])
+
+  const causes = useCauses(loadedMeals)
+
+  if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
+  if (!loadedMeals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!loadedMeals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
   return (
     <div>
-      <SummaryStats causes={causes} />
-      <RankingBar causes={causes} />
+      <SummaryStats causes={causes} meals={loadedMeals} />
+      <RankingBar causes={causes} meals={loadedMeals} />
       {causes.map(cause => (
         <CauseSection key={cause.key} cause={cause} />
       ))}
