@@ -44,7 +44,7 @@ export default function Login() {
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center gap-2.5 justify-center">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-plum-600 flex items-center justify-center">
               <span
                 className="text-white font-medium leading-none"
                 style={{ fontSize: '18px', letterSpacing: '-0.5px' }}
@@ -78,7 +78,7 @@ export default function Login() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:border-transparent transition"
                 placeholder="you@example.com"
               />
             </div>
@@ -92,7 +92,7 @@ export default function Login() {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:border-transparent transition"
                 placeholder="••••••••"
               />
             </div>
@@ -100,7 +100,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors"
+              className="w-full py-2.5 px-4 bg-plum-600 hover:bg-plum-700 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors"
             >
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
@@ -127,7 +127,7 @@ export default function Login() {
 
           <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
             No account?{' '}
-            <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-700">
+            <Link to="/signup" className="font-medium text-plum-600 hover:text-plum-700">
               Sign up
             </Link>
           </p>

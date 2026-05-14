@@ -137,7 +137,7 @@ function GlucoseTimeline({ meals, insights }) {
               onClick={() => setView(opt.key)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 view === opt.key
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-plum-600 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -152,8 +152,9 @@ function GlucoseTimeline({ meals, insights }) {
           {/* Zones */}
           {view === 'peak' && (
             <>
-              <ReferenceArea y1={70}  y2={140} fill="#F0FDF4" fillOpacity={0.5} />
-              <ReferenceArea y1={140} y2={200} fill="#FEF2F2" fillOpacity={0.4} />
+              <ReferenceArea y1={70}  y2={140} fill="#DCFCE7" fillOpacity={0.5} />
+              <ReferenceArea y1={140} y2={180} fill="#FEF3C7" fillOpacity={0.5} />
+              <ReferenceArea y1={180} y2={200} fill="#FEE2E2" fillOpacity={0.5} />
             </>
           )}
           <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
@@ -179,7 +180,7 @@ function GlucoseTimeline({ meals, insights }) {
           <Line
             type="monotone"
             dataKey={dataKey}
-            stroke="#CBD5E1"
+            stroke="#6B21A8"
             strokeWidth={1.5}
             dot={view === 'peak' ? <ZoneDot /> : false}
             activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
@@ -233,7 +234,7 @@ function InsightBadge({ type }) {
     danger:  { icon: '⚠', bg: 'bg-red-50',     text: 'text-red-700',     border: 'border-red-200'   },
     warning: { icon: '!',  bg: 'bg-amber-50',   text: 'text-amber-700',   border: 'border-amber-200' },
     success: { icon: '✓',  bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200'},
-    info:    { icon: 'i',  bg: 'bg-blue-50',    text: 'text-blue-700',    border: 'border-blue-200'  },
+    info:    { icon: 'i',  bg: 'bg-plum-100',   text: 'text-plum-800',    border: 'border-plum-200'  },
   }
   const c = cfg[type] || cfg.info
   return (
@@ -248,7 +249,7 @@ function PatternCard({ pattern }) {
     danger:  'border-red-200 bg-red-50/60',
     warning: 'border-amber-200 bg-amber-50/60',
     success: 'border-emerald-200 bg-emerald-50/60',
-    info:    'border-blue-200 bg-blue-50/60',
+    info:    'border-plum-200 bg-plum-100/60',
   }
   return (
     <div className={`rounded-xl border p-4 ${borderMap[pattern.type] || borderMap.info}`}>
@@ -308,7 +309,7 @@ export default function Dashboard() {
   const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
-  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-600 rounded-full animate-spin" /></div>
   if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
   const { stats, patterns, strategy_effectiveness, top_spike_causes, food_rankings } = insights
@@ -327,16 +328,16 @@ export default function Dashboard() {
       value: stats.avgPeak,
       unit: 'mg/dL',
       sub: stats.avgPeak > 140 ? 'Above safe target' : 'Within range',
-      color: stats.avgPeak > 140 ? '#F97316' : '#22C55E',
-      bg: stats.avgPeak > 140 ? '#FFF7ED' : '#F0FDF4',
+      color: '#4B1684',
+      bg: '#F5F3FF',
       icon: '📈',
     },
     {
       label: 'Spike Rate',
       value: `${stats.spikeRate}%`,
       sub: `${stats.spikeCount} of ${stats.count} meals`,
-      color: stats.spikeRate > 50 ? '#EF4444' : '#F59E0B',
-      bg: stats.spikeRate > 50 ? '#FEF2F2' : '#FFFBEB',
+      color: '#92400E',
+      bg: '#FEF3C7',
       icon: '⚡',
     },
     {
@@ -344,8 +345,8 @@ export default function Dashboard() {
       value: bestStrategy ? `${bestStrategy.spikeRate}%` : '—',
       unit: 'spike rate',
       sub: bestStrategy?.label || '—',
-      color: '#3B82F6',
-      bg: '#EFF6FF',
+      color: '#166534',
+      bg: '#F0FDF4',
       icon: '🏆',
     },
     {
@@ -353,8 +354,8 @@ export default function Dashboard() {
       value: stats.avgDelta,
       unit: 'mg/dL',
       sub: stats.avgDelta > 50 ? 'High variability' : 'Moderate',
-      color: deltaColor(stats.avgDelta),
-      bg: '#F8FAFC',
+      color: '#92400E',
+      bg: '#FEF3C7',
       icon: '↕',
     },
   ]

@@ -41,7 +41,7 @@ export function getEfforLabel(effort) {
 export function getEvidenceLabel(evidence) {
   const map = {
     strong:   { label: 'Strong Evidence',   color: '#22C55E' },
-    moderate: { label: 'Moderate Evidence', color: '#3B82F6' },
+    moderate: { label: 'Moderate Evidence', color: '#6B21A8' },
     emerging: { label: 'Emerging Evidence', color: '#8B5CF6' },
   }
   return map[evidence] || { label: evidence, color: '#6B7280' }
@@ -50,7 +50,7 @@ export function getEvidenceLabel(evidence) {
 export function getRatingColor(rating) {
   const map = {
     excellent: { text: '#15803D', bg: '#DCFCE7', border: '#BBF7D0' },
-    good:      { text: '#1D4ED8', bg: '#DBEAFE', border: '#BFDBFE' },
+    good:      { text: '#4B1684', bg: '#F5F3FF', border: '#E9D5FF' },
     moderate:  { text: '#92400E', bg: '#FEF3C7', border: '#FDE68A' },
     avoid:     { text: '#991B1B', bg: '#FEE2E2', border: '#FECACA' },
   }
@@ -59,18 +59,18 @@ export function getRatingColor(rating) {
 
 export function getCategoryColor(category) {
   const map = {
-    exercise:   { text: '#1D4ED8', bg: '#DBEAFE' },
+    exercise:   { text: '#4B1684', bg: '#F5F3FF' },
     diet:       { text: '#15803D', bg: '#DCFCE7' },
     lifestyle:  { text: '#7C3AED', bg: '#EDE9FE' },
     supplement: { text: '#0E7490', bg: '#CFFAFE' },
     food:       { text: '#92400E', bg: '#FEF3C7' },
-    behavior:   { text: '#1D4ED8', bg: '#DBEAFE' },
+    behavior:   { text: '#4B1684', bg: '#F5F3FF' },
     physiology: { text: '#6B7280', bg: '#F3F4F6' },
     grains:     { text: '#92400E', bg: '#FEF3C7' },
     vegetables: { text: '#15803D', bg: '#DCFCE7' },
     legumes:    { text: '#15803D', bg: '#DCFCE7' },
     fruits:     { text: '#B45309', bg: '#FEF3C7' },
-    protein:    { text: '#1D4ED8', bg: '#DBEAFE' },
+    protein:    { text: '#4B1684', bg: '#F5F3FF' },
     dairy:      { text: '#0E7490', bg: '#CFFAFE' },
     beverages:  { text: '#7C3AED', bg: '#EDE9FE' },
     nuts:       { text: '#92400E', bg: '#FEF3C7' },

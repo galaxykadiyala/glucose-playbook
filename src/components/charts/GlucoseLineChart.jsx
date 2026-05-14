@@ -39,7 +39,7 @@ function CustomTooltip({ active, payload }) {
 
 function CustomDot({ cx, cy, payload }) {
   if (!payload.event) return null
-  const colors = { meal: '#3B82F6', exercise: '#22C55E', snack: '#F59E0B' }
+  const colors = { meal: '#6B21A8', exercise: '#22C55E', snack: '#F59E0B' }
   const color = colors[payload.event] || '#6B7280'
   return (
     <g>
@@ -101,10 +101,10 @@ export default function GlucoseLineChart({ data, height = 280 }) {
         <Line
           type="monotone"
           dataKey="value"
-          stroke="#3B82F6"
+          stroke="#6B21A8"
           strokeWidth={2}
           dot={<CustomDot />}
-          activeDot={{ r: 5, fill: '#3B82F6', stroke: 'white', strokeWidth: 2 }}
+          activeDot={{ r: 5, fill: '#6B21A8', stroke: 'white', strokeWidth: 2 }}
         />
       </LineChart>
     </ResponsiveContainer>

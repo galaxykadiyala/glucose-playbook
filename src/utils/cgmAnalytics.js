@@ -10,7 +10,7 @@
 
 export function scoreColor(score) {
   if (score >= 80) return { text: '#16A34A', bg: '#F0FDF4', border: '#BBF7D0', label: 'Excellent' }
-  if (score >= 65) return { text: '#2563EB', bg: '#EFF6FF', border: '#BFDBFE', label: 'Good' }
+  if (score >= 65) return { text: '#6B21A8', bg: '#F5F3FF', border: '#E9D5FF', label: 'Good' }
   if (score >= 50) return { text: '#D97706', bg: '#FFFBEB', border: '#FDE68A', label: 'Fair' }
   return              { text: '#DC2626', bg: '#FEF2F2', border: '#FECACA', label: 'Poor' }
 }
@@ -22,7 +22,7 @@ export function scoreLabel(score) {
 // ─── Glucose value styling ────────────────────────────────────────────────────
 
 export function glucoseColor(value) {
-  if (value < 70)               return { text: '#1D4ED8', bg: '#DBEAFE', label: 'Low' }
+  if (value < 70)               return { text: '#4B1684', bg: '#F5F3FF', label: 'Low' }
   if (value <= 100)             return { text: '#16A34A', bg: '#F0FDF4', label: 'Optimal' }
   if (value <= 140)             return { text: '#15803D', bg: '#F0FDF4', label: 'In Range' }
   if (value <= 180)             return { text: '#D97706', bg: '#FFFBEB', label: 'Elevated' }
@@ -33,7 +33,7 @@ export function glucoseColor(value) {
 
 export function tirColor(key) {
   const map = {
-    low:      { fill: '#3B82F6', label: 'Low (<70)' },
+    low:      { fill: '#6B21A8', label: 'Low (<70)' },
     inRange:  { fill: '#22C55E', label: 'In Range (70–140)' },
     elevated: { fill: '#F59E0B', label: 'Elevated (140–180)' },
     high:     { fill: '#EF4444', label: 'High (>180)' },
@@ -48,7 +48,7 @@ export function todColor(key) {
     morning:   { fill: '#F59E0B', light: '#FFFBEB', label: 'Morning' },
     afternoon: { fill: '#F97316', light: '#FFF7ED', label: 'Afternoon' },
     evening:   { fill: '#8B5CF6', light: '#F5F3FF', label: 'Evening' },
-    night:     { fill: '#3B82F6', light: '#EFF6FF', label: 'Night' },
+    night:     { fill: '#6B21A8', light: '#F5F3FF', label: 'Night' },
   }
   return map[key] || { fill: '#94A3B8', light: '#F8FAFC', label: key }
 }

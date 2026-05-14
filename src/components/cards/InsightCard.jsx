@@ -4,7 +4,7 @@ const typeConfig = {
   success: { bg: 'bg-emerald-50', border: 'border-emerald-200', icon: 'text-emerald-600', dot: 'bg-emerald-500' },
   warning: { bg: 'bg-amber-50',   border: 'border-amber-200',   icon: 'text-amber-600',   dot: 'bg-amber-500'   },
   danger:  { bg: 'bg-red-50',     border: 'border-red-200',     icon: 'text-red-600',     dot: 'bg-red-500'     },
-  info:    { bg: 'bg-blue-50',    border: 'border-blue-200',    icon: 'text-blue-600',    dot: 'bg-blue-500'    },
+  info:    { bg: 'bg-plum-100',   border: 'border-plum-200',    icon: 'text-plum-600',    dot: 'bg-plum-600'    },
 }
 
 const icons = {

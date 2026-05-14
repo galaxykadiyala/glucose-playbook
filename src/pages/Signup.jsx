@@ -55,7 +55,7 @@ export default function Signup() {
             We sent a confirmation link to <span className="font-medium text-slate-700 dark:text-slate-300">{email}</span>.
             Click it to activate your account.
           </p>
-          <Link to="/login" className="text-sm font-medium text-blue-600 hover:text-blue-700">
+          <Link to="/login" className="text-sm font-medium text-plum-600 hover:text-plum-700">
             Back to sign in
           </Link>
         </div>
@@ -69,7 +69,7 @@ export default function Signup() {
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center gap-2.5 justify-center">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-plum-600 flex items-center justify-center">
               <span
                 className="text-white font-medium leading-none"
                 style={{ fontSize: '18px', letterSpacing: '-0.5px' }}
@@ -103,7 +103,7 @@ export default function Signup() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:border-transparent transition"
                 placeholder="you@example.com"
               />
             </div>
@@ -117,7 +117,7 @@ export default function Signup() {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:border-transparent transition"
                 placeholder="At least 8 characters"
               />
             </div>
@@ -131,7 +131,7 @@ export default function Signup() {
                 required
                 value={confirm}
                 onChange={e => setConfirm(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:border-transparent transition"
                 placeholder="••••••••"
               />
             </div>
@@ -139,7 +139,7 @@ export default function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors"
+              className="w-full py-2.5 px-4 bg-plum-600 hover:bg-plum-700 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors"
             >
               {loading ? 'Creating account…' : 'Create account'}
             </button>
@@ -166,7 +166,7 @@ export default function Signup() {
 
           <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
             Already have an account?{' '}
-            <Link to="/login" className="font-medium text-blue-600 hover:text-blue-700">
+            <Link to="/login" className="font-medium text-plum-600 hover:text-plum-700">
               Sign in
             </Link>
           </p>
