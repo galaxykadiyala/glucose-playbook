@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
+import { BarChart, Bar, Cell, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
 import { analyseDataset, detectStabilisers } from '../utils/insightsEngine'
 import { useStint } from '../context/StintContext'
 import Card, { CardHeader } from '../components/ui/Card'
@@ -161,7 +161,11 @@ function StrategyCard({ strategy }) {
               formatter={(v) => [`${v}%`, 'Spike rate']}
               contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }}
             />
-            <Bar dataKey="spikeRate" radius={[0, 4, 4, 0]} fill={color} barSize={18} />
+            <Bar dataKey="spikeRate" radius={[0, 4, 4, 0]} barSize={18}>
+              {barData.map((d) => (
+                <Cell key={d.name} fill={d.name === 'Without' ? '#F59E0B' : color} />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -305,22 +309,22 @@ export default function WhatWorks() {
     <div>
 
       {/* Hero banner */}
-      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-5 mb-6 text-white">
+      <div className="bg-plum-700 rounded-2xl p-5 mb-6 text-white">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-emerald-200 text-xs font-semibold uppercase tracking-wider mb-1">Key Finding</p>
+            <p className="text-plum-200 text-xs font-semibold uppercase tracking-wider mb-1">Key Finding</p>
             <h2 className="text-xl font-bold mb-1.5">Strategy beats food choice</h2>
-            <p className="text-emerald-100 text-sm leading-relaxed max-w-md">
+            <p className="text-plum-100 text-sm leading-relaxed max-w-md">
               White rice (GI 73) peaked at <strong>170 mg/dL without strategies</strong> and only <strong>135 mg/dL with chia + walk</strong> — same food, 35 mg/dL difference. Every zero-strategy meal spiked.
             </p>
           </div>
           <div className="flex-shrink-0 text-center bg-white/10 rounded-xl px-5 py-3">
             <div className="text-3xl font-extrabold">100%</div>
-            <div className="text-emerald-200 text-[11px] mt-0.5">zero-strategy<br/>spike rate</div>
+            <div className="text-plum-200 text-[11px] mt-0.5">zero-strategy<br/>spike rate</div>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-emerald-500/40">
+        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-plum-600/60">
           {[
             { label: 'Spike rate with walk', value: '33%', sub: 'vs 63% without' },
             { label: 'Spike rate with chia', value: '38%', sub: 'vs 100% without' },
@@ -328,8 +332,8 @@ export default function WhatWorks() {
           ].map((s, i) => (
             <div key={i} className="text-center">
               <div className="text-xl font-bold">{s.value}</div>
-              <div className="text-emerald-200 text-[10px] mt-0.5 leading-tight">{s.label}</div>
-              <div className="text-emerald-300 text-[10px]">{s.sub}</div>
+              <div className="text-plum-200 text-[10px] mt-0.5 leading-tight">{s.label}</div>
+              <div className="text-plum-200 text-[10px]">{s.sub}</div>
             </div>
           ))}
         </div>

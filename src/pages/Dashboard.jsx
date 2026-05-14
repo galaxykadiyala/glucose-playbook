@@ -17,9 +17,9 @@ import { getZone, ZONE_COLORS } from '../utils/glucoseZones'
 
 // ─── Stat card ────────────────────────────────────────────────────────────────
 
-function StatCard({ label, value, unit, sub, color, bg, icon }) {
+function StatCard({ label, value, unit, sub, color, bg, icon, tileBg = 'bg-white', tileBorder = 'border-slate-100' }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-card p-5 flex flex-col gap-3">
+    <div className={`${tileBg} rounded-2xl border ${tileBorder} shadow-card p-5 flex flex-col gap-3`}>
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</span>
         {icon && <span className="text-base">{icon}</span>}
@@ -47,13 +47,21 @@ function ZoneDot(props) {
   if (cx == null || cy == null || value == null) return null
   const zone  = getZone(value)
   const color = zone ? ZONE_COLORS[zone].stroke : '#94A3B8'
+  const isSpike = !!payload.spike
   return (
     <g>
-      {/* Outer ring for spike events */}
-      {payload.spike && (
-        <circle cx={cx} cy={cy} r={9} fill="none" stroke={color} strokeWidth={1.5} strokeOpacity={0.35} />
+      {/* Honey halo for spike events — soft amber glow behind the red dot */}
+      {isSpike && (
+        <circle cx={cx} cy={cy} r={8.5} fill="#FEF3C7" />
       )}
-      <circle cx={cx} cy={cy} r={4.5} fill={color} stroke="white" strokeWidth={2} />
+      <circle
+        cx={cx}
+        cy={cy}
+        r={4.5}
+        fill={isSpike ? '#EF4444' : color}
+        stroke="white"
+        strokeWidth={2}
+      />
     </g>
   )
 }
@@ -331,6 +339,8 @@ export default function Dashboard() {
       color: '#4B1684',
       bg: '#F5F3FF',
       icon: '📈',
+      tileBg: 'bg-plum-50',
+      tileBorder: 'border-plum-100',
     },
     {
       label: 'Spike Rate',
@@ -339,6 +349,8 @@ export default function Dashboard() {
       color: '#92400E',
       bg: '#FEF3C7',
       icon: '⚡',
+      tileBg: 'bg-honey-50',
+      tileBorder: 'border-honey-100',
     },
     {
       label: 'Best Strategy',
@@ -348,6 +360,8 @@ export default function Dashboard() {
       color: '#166534',
       bg: '#F0FDF4',
       icon: '🏆',
+      tileBg: 'bg-green-50',
+      tileBorder: 'border-green-100',
     },
     {
       label: 'Avg Delta',
@@ -357,6 +371,8 @@ export default function Dashboard() {
       color: '#92400E',
       bg: '#FEF3C7',
       icon: '↕',
+      tileBg: 'bg-honey-50',
+      tileBorder: 'border-honey-100',
     },
   ]
 
