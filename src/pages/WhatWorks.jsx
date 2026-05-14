@@ -141,7 +141,7 @@ function StrategyCard({ strategy }) {
           <div className="text-[10px] text-slate-400">spike rate</div>
         </div>
         <div className="bg-slate-50 rounded-lg p-2.5 text-center">
-          <div className="text-base font-bold text-plum-600">-{peakDiff}</div>
+          <div className="text-base font-bold text-plum-500">-{peakDiff}</div>
           <div className="text-[10px] text-slate-400">mg/dL peak</div>
         </div>
         <div className="bg-slate-50 rounded-lg p-2.5 text-center">
@@ -210,7 +210,7 @@ export default function WhatWorks() {
   const se = insights?.strategy_effectiveness || []
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
-  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-600 rounded-full animate-spin" /></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-500 rounded-full animate-spin" /></div>
   if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
 
@@ -242,8 +242,8 @@ export default function WhatWorks() {
       key:   'chia',
       label: 'Chia Seeds',
       icon:  '🌱',
-      color: '#6B21A8',
-      light: '#F5F3FF',
+      color: '#8B5CF6',
+      light: '#EDE9FE',
       mechanism: 'Forms a viscous gel in the stomach that physically slows glucose absorption. Also delays time-to-peak by ~15 min, giving insulin more time to respond.',
       effect: 'Reduces avg peak by ~6 mg/dL and lowers spike rate from 100% to 37.5% in meals with carbs.',
       withStats: { spikeRate: Math.round(chiaWith.spikeRate) || 37, avgPeak: chiaWith.avgPeak || 138 },
@@ -267,7 +267,7 @@ export default function WhatWorks() {
       label: 'Protein Pairing',
       icon:  '🥚',
       color: '#8B5CF6',
-      light: '#F5F3FF',
+      light: '#EDE9FE',
       mechanism: 'Protein eaten alongside or before carbs stimulates GLP-1 and GIP secretion, slowing gastric emptying and enhancing insulin release before glucose peaks.',
       effect: 'Chenna payesh (sweet) + chicken roll: peak 135 with no spike. Protein co-ingestion consistently blunts sweet food responses.',
       withStats: { spikeRate: 36, avgPeak: 138 },
@@ -408,7 +408,7 @@ export default function WhatWorks() {
             icon: '⏱️',
             title: 'Timing is everything',
             body: 'Chia seeds must be taken 10–15 min before eating to form a gel. Post-meal walks must start within 30 min of eating — after 45 min the glucose peak has already occurred and the walk only aids recovery, not prevention.',
-            color: '#6B21A8',
+            color: '#8B5CF6',
           },
           {
             icon: '📐',

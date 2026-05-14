@@ -39,7 +39,7 @@ function CustomTooltip({ active, payload }) {
 function ratingToColor(rating) {
   const map = {
     excellent: '#22C55E',
-    good:      '#6B21A8',
+    good:      '#8B5CF6',
     moderate:  '#F59E0B',
     avoid:     '#EF4444',
   }
@@ -79,7 +79,7 @@ export default function FoodImpactChart({ data, height = 320 }) {
         <ReferenceLine y={30} stroke="#F59E0B" strokeDasharray="4 4" strokeWidth={1.5} label={{ value: '+30', fontSize: 10, fill: '#F59E0B', position: 'right' }} />
         <Scatter
           data={plotData}
-          fill="#6B21A8"
+          fill="#8B5CF6"
           shape={(props) => {
             const { cx, cy, payload } = props
             const color = ratingToColor(payload.rating)

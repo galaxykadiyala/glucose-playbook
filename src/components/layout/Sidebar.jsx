@@ -110,14 +110,14 @@ function NavItem({ item }) {
         className={({ isActive }) =>
           `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors border-l-[3px] ${
             isActive
-              ? 'bg-plum-100 dark:bg-plum-900/40 text-plum-800 dark:text-plum-300 border-plum-600'
+              ? 'bg-plum-100 dark:bg-plum-900/40 text-plum-800 dark:text-plum-300 border-plum-500'
               : 'border-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
           }`
         }
       >
         {({ isActive }) => (
           <>
-            <span className={isActive ? 'text-plum-600 dark:text-plum-400' : 'text-slate-400 dark:text-slate-500'}>
+            <span className={isActive ? 'text-plum-500 dark:text-plum-400' : 'text-slate-400 dark:text-slate-500'}>
               {item.icon}
             </span>
             <span className="flex-1">{item.label}</span>
@@ -139,7 +139,7 @@ export default function Sidebar() {
     <aside className="hidden md:flex w-60 flex-shrink-0 flex-col bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-700/60 h-screen sticky top-0">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-slate-100 dark:border-slate-700/60">
-        <div className="w-8 h-8 rounded-lg bg-plum-600 flex items-center justify-center flex-shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-plum-500 flex items-center justify-center flex-shrink-0">
           <span
             className="text-white font-medium leading-none"
             style={{ fontSize: '14px', letterSpacing: '-0.5px' }}

@@ -93,7 +93,7 @@ export default function Navbar() {
       <header className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700/60 flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-plum-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-plum-500 flex items-center justify-center">
               <span
                 className="text-white font-medium text-sm leading-none"
                 style={{ letterSpacing: '-0.5px' }}
@@ -116,7 +116,7 @@ export default function Navbar() {
               className={({ isActive }) =>
                 `flex-shrink-0 px-4 py-2.5 text-xs font-medium border-b-2 transition-colors ${
                   isActive
-                    ? 'border-plum-600 text-plum-600'
+                    ? 'border-plum-500 text-plum-500'
                     : 'border-transparent text-slate-500 dark:text-slate-400'
                 }`
               }

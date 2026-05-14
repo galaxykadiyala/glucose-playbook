@@ -42,9 +42,9 @@ function HourlyAreaChart({ data }) {
         <Area
           type="monotone"
           dataKey="avg"
-          stroke="#6B21A8"
+          stroke="#8B5CF6"
           strokeWidth={2.5}
-          fill="#F5F3FF"
+          fill="#EDE9FE"
           fillOpacity={0.3}
           dot={false}
         />
@@ -150,7 +150,7 @@ export default function Patterns() {
               onClick={() => setSelectedDay(i)}
               className={`flex-shrink-0 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                 selectedDay === i
-                  ? 'bg-plum-600 text-white'
+                  ? 'bg-plum-500 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -166,7 +166,7 @@ export default function Patterns() {
         <div className="grid grid-cols-4 gap-3 mb-5">
           {[
             { label: 'Time in Range', value: `${currentDay.timeInRange}%`, color: currentDay.timeInRange >= 80 ? '#22C55E' : '#F59E0B' },
-            { label: 'Average',       value: `${currentDay.avgGlucose}`, unit: 'mg/dL', color: '#6B21A8' },
+            { label: 'Average',       value: `${currentDay.avgGlucose}`, unit: 'mg/dL', color: '#8B5CF6' },
             { label: 'Max Glucose',   value: `${currentDay.maxGlucose}`, unit: 'mg/dL', color: currentDay.maxGlucose > 180 ? '#EF4444' : '#F59E0B' },
             { label: 'Est. A1C',      value: `${currentDay.estimatedA1c}%`, color: parseFloat(currentDay.estimatedA1c) < 5.7 ? '#22C55E' : '#F59E0B' },
           ].map((s, i) => (

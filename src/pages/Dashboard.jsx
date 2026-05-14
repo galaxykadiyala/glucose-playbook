@@ -145,7 +145,7 @@ function GlucoseTimeline({ meals, insights }) {
               onClick={() => setView(opt.key)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 view === opt.key
-                  ? 'bg-plum-600 text-white'
+                  ? 'bg-plum-500 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -188,7 +188,7 @@ function GlucoseTimeline({ meals, insights }) {
           <Line
             type="monotone"
             dataKey={dataKey}
-            stroke="#6B21A8"
+            stroke="#8B5CF6"
             strokeWidth={1.5}
             dot={view === 'peak' ? <ZoneDot /> : false}
             activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
@@ -317,7 +317,7 @@ export default function Dashboard() {
   const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
-  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-600 rounded-full animate-spin" /></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-500 rounded-full animate-spin" /></div>
   if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
   const { stats, patterns, strategy_effectiveness, top_spike_causes, food_rankings } = insights
@@ -336,8 +336,8 @@ export default function Dashboard() {
       value: stats.avgPeak,
       unit: 'mg/dL',
       sub: stats.avgPeak > 140 ? 'Above safe target' : 'Within range',
-      color: '#4B1684',
-      bg: '#F5F3FF',
+      color: '#5B21B6',
+      bg: '#EDE9FE',
       icon: '📈',
       tileBg: 'bg-plum-50',
       tileBorder: 'border-plum-100',

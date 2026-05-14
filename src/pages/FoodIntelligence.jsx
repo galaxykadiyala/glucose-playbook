@@ -184,7 +184,7 @@ export default function FoodIntelligence() {
           <div className="flex flex-wrap gap-3 mb-1">
             {[
               { color: '#22C55E', label: 'Excellent' },
-              { color: '#6B21A8', label: 'Good' },
+              { color: '#8B5CF6', label: 'Good' },
               { color: '#F59E0B', label: 'Moderate' },
               { color: '#EF4444', label: 'Avoid' },
             ].map((l, i) => (
@@ -256,7 +256,7 @@ export default function FoodIntelligence() {
               onClick={() => setActiveRating(r)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 activeRating === r
-                  ? 'bg-plum-600 text-white'
+                  ? 'bg-plum-500 text-white'
                   : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300'
               }`}
             >
@@ -269,7 +269,7 @@ export default function FoodIntelligence() {
         <select
           value={sortBy}
           onChange={e => setSortBy(e.target.value)}
-          className="text-xs border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-plum-600"
+          className="text-xs border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-plum-500"
         >
           {SORT_OPTIONS.map(o => (
             <option key={o.value} value={o.value}>Sort by {o.label}</option>

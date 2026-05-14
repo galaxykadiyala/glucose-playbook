@@ -137,7 +137,7 @@ export default function WhatsAppConnect() {
 
       {loading && (
         <div className="flex items-center justify-center py-16">
-          <div className="w-6 h-6 rounded-full border-2 border-plum-600 border-t-transparent animate-spin" />
+          <div className="w-6 h-6 rounded-full border-2 border-plum-500 border-t-transparent animate-spin" />
         </div>
       )}
 
@@ -221,7 +221,7 @@ export default function WhatsAppConnect() {
               After joining, send this 6-character code to the same number:
             </p>
             <div className="flex items-center gap-3">
-              <span className="font-mono text-3xl font-bold tracking-[0.25em] text-plum-600 dark:text-plum-400 select-all">
+              <span className="font-mono text-3xl font-bold tracking-[0.25em] text-plum-500 dark:text-plum-400 select-all">
                 {code}
               </span>
               <button
