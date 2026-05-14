@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import Layout from './components/layout/Layout'
 import Dashboard from './pages/Dashboard'
 import Patterns from './pages/Patterns'
@@ -30,32 +31,35 @@ function RequireAuth({ children }) {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/login"         element={<Login />} />
-      <Route path="/signup"        element={<Signup />} />
-      <Route path="/auth/callback" element={<AuthCallback />} />
-      <Route
-        path="/*"
-        element={
-          <RequireAuth>
-            <Layout>
-              <Routes>
-                <Route path="/"                  element={<Navigate to="/dashboard" replace />} />
-                <Route path="/dashboard"         element={<Dashboard />} />
-                <Route path="/patterns"          element={<Patterns />} />
-                <Route path="/spike-causes"      element={<SpikeCauses />} />
-                <Route path="/what-works"        element={<WhatWorks />} />
-                <Route path="/strategies"        element={<Strategies />} />
-                <Route path="/food"              element={<FoodIntelligence />} />
-                <Route path="/daily-intelligence" element={<DailyIntelligence />} />
-                <Route path="/fix-your-glucose"  element={<FixYourGlucose />} />
-                <Route path="/upload"            element={<Upload />} />
-                <Route path="/whatsapp"          element={<WhatsAppConnect />} />
-              </Routes>
-            </Layout>
-          </RequireAuth>
-        }
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/login"         element={<Login />} />
+        <Route path="/signup"        element={<Signup />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route
+          path="/*"
+          element={
+            <RequireAuth>
+              <Layout>
+                <Routes>
+                  <Route path="/"                  element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/dashboard"         element={<Dashboard />} />
+                  <Route path="/patterns"          element={<Patterns />} />
+                  <Route path="/spike-causes"      element={<SpikeCauses />} />
+                  <Route path="/what-works"        element={<WhatWorks />} />
+                  <Route path="/strategies"        element={<Strategies />} />
+                  <Route path="/food"              element={<FoodIntelligence />} />
+                  <Route path="/daily-intelligence" element={<DailyIntelligence />} />
+                  <Route path="/fix-your-glucose"  element={<FixYourGlucose />} />
+                  <Route path="/upload"            element={<Upload />} />
+                  <Route path="/whatsapp"          element={<WhatsAppConnect />} />
+                </Routes>
+              </Layout>
+            </RequireAuth>
+          }
+        />
+      </Routes>
+      <Analytics />
+    </>
   )
 }
