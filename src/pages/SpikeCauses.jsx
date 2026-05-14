@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { ResponsiveContainer, LineChart, Line, ReferenceLine } from 'recharts'
-import cgmData from '../data/cgmData.json'
 import { detectCauses, severityMeta, deltaColor } from '../utils/insightsEngine'
+import { buildMealsForUser } from '../lib/mealAdapter'
 
 // ─── Static cause definitions ─────────────────────────────────────────────────
 // spikeIds   → meals that demonstrate the spike pattern for this cause
@@ -426,6 +426,8 @@ function SummaryStats({ causes }) {
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
+
+const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000'
 
 export default function SpikeCauses() {
   const causes = useCauses()

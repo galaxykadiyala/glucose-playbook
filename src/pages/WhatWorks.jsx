@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
-import cgmData from '../data/cgmData.json'
 import { analyseDataset, detectStabilisers } from '../utils/insightsEngine'
+import { buildMealsForUser } from '../lib/mealAdapter'
 import Card, { CardHeader } from '../components/ui/Card'
 
 const meals = cgmData.meals
@@ -200,6 +200,8 @@ function StackingBar({ label, spikeRate, count, color }) {
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
+
+const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000'
 
 export default function WhatWorks() {
   const { strategy_effectiveness: se } = useMemo(() => analyseDataset(meals), [])
