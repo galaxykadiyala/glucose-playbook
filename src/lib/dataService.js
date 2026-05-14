@@ -11,13 +11,14 @@ export async function getStints(userId) {
 }
 
 export async function getReadings(stintId) {
-  const { data, error } = await supabase
-    .from('cgm_readings')
-    .select('*')
-    .eq('stint_id', stintId)
-    .order('timestamp', { ascending: true })
-  if (error) throw error
-  return data
+  return paginate((from, to) =>
+    supabase
+      .from('cgm_readings')
+      .select('*')
+      .eq('stint_id', stintId)
+      .order('timestamp', { ascending: true })
+      .range(from, to)
+  )
 }
 
 export async function getCurrentStint(userId) {
@@ -63,13 +64,27 @@ export async function getManualGlucose(userId, { since, until } = {}) {
   return data
 }
 
-export async function getAllReadings(userId) {
-  const { data, error } = await supabase
-    .from('cgm_readings')
-    .select('timestamp, glucose_value, stint_id, cgm_stints!inner(user_id)')
-    .eq('cgm_stints.user_id', userId)
-    .order('timestamp', { ascending: true })
+export async function getAllReadings(userId, { since, until } = {}) {
+  return paginate((from, to) => {
+    let q = supabase
+      .from('cgm_readings')
+      .select('timestamp, glucose_value, stint_id, cgm_stints!inner(user_id)')
+      .eq('cgm_stints.user_id', userId)
+      .order('timestamp', { ascending: true })
+      .range(from, to)
+    if (since) q = q.gte('timestamp', since)
+    if (until) q = q.lte('timestamp', until)
+    return q
+  })
+}
 
-  if (error) throw error
-  return data
+async function paginate(queryFn, pageSize = 1000) {
+  const out = []
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await queryFn(from, from + pageSize - 1)
+    if (error) throw error
+    out.push(...data)
+    if (data.length < pageSize) break
+  }
+  return out
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   ResponsiveContainer, LineChart, Line, XAxis, YAxis,
   CartesianGrid, Tooltip, ReferenceLine, ReferenceArea,
@@ -9,8 +9,7 @@ import {
   severityMeta,
   giLabel,
 } from '../utils/insightsEngine'
-import { useUser } from '../context/UserContext'
-import { buildMealsForUser } from '../lib/mealAdapter'
+import { useStint } from '../context/StintContext'
 import { getZone, ZONE_COLORS } from '../utils/glucoseZones'
 
 // ─── Derived data ─────────────────────────────────────────────────────────────
@@ -305,21 +304,7 @@ function MealRow({ meal, insight }) {
 // ─── Main page ─────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
-  const { user } = useUser()
-  const [meals, setMeals] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    if (!user) return
-    let cancelled = false
-    setError(null)
-    setMeals(null)
-    buildMealsForUser(user.id)
-      .then((m) => { if (!cancelled) setMeals(m) })
-      .catch((e) => { if (!cancelled) setError(e) })
-    return () => { cancelled = true }
-  }, [user])
-
+  const { meals, error } = useStint()
   const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>

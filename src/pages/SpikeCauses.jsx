@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { ResponsiveContainer, LineChart, Line, ReferenceLine } from 'recharts'
 import { detectCauses, severityMeta, deltaColor } from '../utils/insightsEngine'
-import { useUser } from '../context/UserContext'
-import { buildMealsForUser } from '../lib/mealAdapter'
+import { useStint } from '../context/StintContext'
 
 // ─── Static cause definitions ─────────────────────────────────────────────────
 // spikeIds   → meals that demonstrate the spike pattern for this cause
@@ -428,21 +427,7 @@ function SummaryStats({ causes, meals }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function SpikeCauses() {
-  const { user } = useUser()
-  const [loadedMeals, setLoadedMeals] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    if (!user) return
-    let cancelled = false
-    setError(null)
-    setLoadedMeals(null)
-    buildMealsForUser(user.id)
-      .then((m) => { if (!cancelled) setLoadedMeals(m) })
-      .catch((e) => { if (!cancelled) setError(e) })
-    return () => { cancelled = true }
-  }, [user])
-
+  const { meals: loadedMeals, error } = useStint()
   const causes = useCauses(loadedMeals)
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>

@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
 import { analyseDataset, detectStabilisers } from '../utils/insightsEngine'
-import { useUser } from '../context/UserContext'
-import { buildMealsForUser } from '../lib/mealAdapter'
+import { useStint } from '../context/StintContext'
 import Card, { CardHeader } from '../components/ui/Card'
 
 
@@ -202,21 +201,7 @@ function StackingBar({ label, spikeRate, count, color }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function WhatWorks() {
-  const { user } = useUser()
-  const [meals, setMeals] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    if (!user) return
-    let cancelled = false
-    setError(null)
-    setMeals(null)
-    buildMealsForUser(user.id)
-      .then((m) => { if (!cancelled) setMeals(m) })
-      .catch((e) => { if (!cancelled) setError(e) })
-    return () => { cancelled = true }
-  }, [user])
-
+  const { meals, error } = useStint()
   const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
   const se = insights?.strategy_effectiveness || []
 

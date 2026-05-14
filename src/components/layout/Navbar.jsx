@@ -48,27 +48,26 @@ function ThemeToggle() {
   )
 }
 
-function StintBadge() {
-  const { stints, selectedStintId, setSelectedStintId, hasData } = useStint()
+function MonthBadge() {
+  const { months, selectedMonth, setSelectedMonth } = useStint()
 
-  if (hasData && stints.length > 1) {
+  if (!months.length) {
     return (
-      <select
-        value={selectedStintId ?? ''}
-        onChange={e => setSelectedStintId(e.target.value)}
-        className="px-3 py-1.5 rounded-full text-xs font-medium border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 focus:outline-none cursor-pointer"
-      >
-        {stints.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-      </select>
+      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700 rounded-full text-xs font-medium text-slate-500 dark:text-slate-400">
+        No data
+      </span>
     )
   }
 
-  const label = hasData && stints.length === 1 ? stints[0].name : 'Feb–Mar 2026'
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full text-xs font-medium text-emerald-700 dark:text-emerald-400">
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-      {label}
-    </span>
+    <select
+      value={selectedMonth ?? ''}
+      onChange={e => setSelectedMonth(e.target.value || null)}
+      className="px-3 py-1.5 rounded-full text-xs font-medium border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 focus:outline-none cursor-pointer"
+    >
+      <option value="">All time</option>
+      {months.map(m => <option key={m.key} value={m.key}>{m.label}</option>)}
+    </select>
   )
 }
 
@@ -85,7 +84,7 @@ export default function Navbar() {
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{meta.subtitle}</p>
         </div>
         <div className="flex items-center gap-2">
-          <StintBadge />
+          <MonthBadge />
           <ThemeToggle />
         </div>
       </header>
@@ -102,7 +101,7 @@ export default function Navbar() {
             <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">Glucose Decode</span>
           </div>
           <div className="flex items-center gap-2">
-            <StintBadge />
+            <MonthBadge />
             <ThemeToggle />
           </div>
         </div>

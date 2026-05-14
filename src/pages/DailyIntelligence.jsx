@@ -5,7 +5,6 @@ import {
   ReferenceLine, ReferenceArea, Legend, Cell,
 } from 'recharts'
 import analytics from '../data/fullAnalytics.json'
-import { useStint } from '../context/StintContext'
 import {
   scoreColor, glucoseColor, tirColor, todColor,
   getOvernightReadings, rollingAvgScore, shortDate, formatDelta,
@@ -857,25 +856,18 @@ function DayRow({ day, isSelected, onSelect }) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function DailyIntelligence() {
-  const { stints, selectedStintId, setSelectedStintId, stintPhaseData, hasData } = useStint()
-
+  // Phase 4: this page currently shows the precomputed analytics demo from
+  // fullAnalytics.json. Live Supabase wiring (deep analytics over real readings)
+  // is a separate piece of work.
   const [activePhase, setActivePhase]   = useState('phase_2')
   const [activeTab,   setActiveTab]     = useState('overview')
   const [selectedDate, setSelectedDate] = useState(null)
 
-  // Use live Supabase data when available, fall back to hardcoded
-  const phaseData = hasData && stintPhaseData
-    ? stintPhaseData
-    : analytics.datasets[activePhase]
-
-  // Phase selector options
-  const phaseOptions = hasData && stints.length > 0
-    ? stints.map(s => ({ id: s.id, label: s.name, shortLabel: `${s.start_date} – ${s.end_date}` }))
-    : PHASES
-  const currentPhaseId = hasData ? selectedStintId : activePhase
+  const phaseData = analytics.datasets[activePhase]
+  const phaseOptions = PHASES
+  const currentPhaseId = activePhase
   const handlePhaseChange = (id) => {
-    if (hasData) setSelectedStintId(id)
-    else setActivePhase(id)
+    setActivePhase(id)
     setSelectedDate(null)
   }
 

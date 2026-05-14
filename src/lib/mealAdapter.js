@@ -1,45 +1,42 @@
-import { getMealLogs, getAllReadings } from './dataService'
-
 const SPIKE_THRESHOLD = 140
 const WINDOW_BEFORE_MIN = 30
 const WINDOW_AFTER_MIN = 120
 
-export async function buildMealsForUser(userId) {
-  const [mealRows, readings] = await Promise.all([
-    getMealLogs(userId),
-    getAllReadings(userId),
-  ])
-  return mealRows.map((row) => buildMealFromRow(row, readings))
+export function buildMealsFromRows(mealRows, readings) {
+  const ts = readings.map(r => ({
+    ts: new Date(r.timestamp).getTime(),
+    value: r.glucose_value,
+  }))
+  return mealRows.map(row => buildMealFromRow(row, ts))
 }
 
-function buildMealFromRow(row, readings) {
+function buildMealFromRow(row, readingTs) {
   const t0 = new Date(row.timestamp).getTime()
-  const before = readings.filter((r) => {
-    const dt = new Date(r.timestamp).getTime()
-    return dt >= t0 - WINDOW_BEFORE_MIN * 60000 && dt <= t0
-  })
-  const after = readings.filter((r) => {
-    const dt = new Date(r.timestamp).getTime()
-    return dt > t0 && dt <= t0 + WINDOW_AFTER_MIN * 60000
-  })
+  const beforeStart = t0 - WINDOW_BEFORE_MIN * 60000
+  const afterEnd = t0 + WINDOW_AFTER_MIN * 60000
 
-  const baseline = before.length
-    ? Math.round(before.reduce((s, r) => s + r.glucose_value, 0) / before.length)
-    : null
+  let baselineSum = 0
+  let baselineN = 0
+  let peakReading = null
+  const afterReadings = []
 
-  const peakReading = after.reduce(
-    (max, r) => (max == null || r.glucose_value > max.glucose_value ? r : max),
-    null,
-  )
+  for (const r of readingTs) {
+    if (r.ts < beforeStart) continue
+    if (r.ts > afterEnd) break // readings are sorted ascending
+    if (r.ts <= t0) {
+      baselineSum += r.value
+      baselineN++
+    } else {
+      afterReadings.push(r)
+      if (peakReading == null || r.value > peakReading.value) peakReading = r
+    }
+  }
 
-  const peak = peakReading?.glucose_value ?? null
+  const baseline = baselineN ? Math.round(baselineSum / baselineN) : null
+  const peak = peakReading?.value ?? null
   const delta = peak != null && baseline != null ? peak - baseline : null
-  const peakTimeMin = peakReading
-    ? Math.round((new Date(peakReading.timestamp).getTime() - t0) / 60000)
-    : null
-
+  const peakTimeMin = peakReading ? Math.round((peakReading.ts - t0) / 60000) : null
   const spike = peak != null ? peak > SPIKE_THRESHOLD : false
-
   const seedMatch = /^seed:(meal_\d+)/.exec(row.notes || '')
 
   return {
@@ -56,9 +53,9 @@ function buildMealFromRow(row, readings) {
       peak,
       delta,
       peak_time_min: peakTimeMin,
-      readings: after.map((r) => ({
-        time_min: Math.round((new Date(r.timestamp).getTime() - t0) / 60000),
-        value: r.glucose_value,
+      readings: afterReadings.map(r => ({
+        time_min: Math.round((r.ts - t0) / 60000),
+        value: r.value,
       })),
     },
     spike,
@@ -73,7 +70,7 @@ function buildMealFromRow(row, readings) {
 
 function parseFoodsText(text) {
   if (!text) return []
-  return text.split(',').map((s) => ({ name: s.trim(), gi_estimate: null, category: null }))
+  return text.split(',').map(s => ({ name: s.trim(), gi_estimate: null, category: null }))
 }
 
 function severityFor(peak) {
