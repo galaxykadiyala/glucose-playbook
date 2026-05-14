@@ -1,5 +1,5 @@
 -- ============================================================
--- Glucose Decode — Supabase schema
+-- Glyco — Supabase schema
 -- Run this in the Supabase SQL editor (Dashboard > SQL Editor)
 -- ============================================================
 

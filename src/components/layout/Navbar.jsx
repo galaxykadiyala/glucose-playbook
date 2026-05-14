@@ -73,7 +73,7 @@ function MonthBadge() {
 
 export default function Navbar() {
   const { pathname } = useLocation()
-  const meta = titles[pathname] || { title: 'Glucose Decode', subtitle: '' }
+  const meta = titles[pathname] || { title: 'Glyco', subtitle: '' }
 
   return (
     <>
@@ -94,11 +94,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 17l4-8 4 5 3-3 4 6" />
-              </svg>
+              <span
+                className="text-white font-medium text-sm leading-none"
+                style={{ letterSpacing: '-0.5px' }}
+              >
+                G
+              </span>
             </div>
-            <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">Glucose Decode</span>
+            <span className="font-medium text-slate-900 dark:text-slate-100 text-sm">Glyco</span>
           </div>
           <div className="flex items-center gap-2">
             <MonthBadge />

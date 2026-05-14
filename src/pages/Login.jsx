@@ -42,16 +42,19 @@ export default function Login() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="flex items-center gap-2.5 justify-center mb-8">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 17l4-8 4 5 3-3 4 6" />
-            </svg>
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex items-center gap-2.5 justify-center">
+            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
+              <span
+                className="text-white font-medium leading-none"
+                style={{ fontSize: '18px', letterSpacing: '-0.5px' }}
+              >
+                G
+              </span>
+            </div>
+            <span className="font-medium text-slate-900 dark:text-slate-100 text-lg leading-tight">Glyco</span>
           </div>
-          <div>
-            <span className="font-bold text-slate-900 dark:text-slate-100 text-lg leading-tight">Glucose</span>
-            <span className="font-bold text-blue-600 text-lg leading-tight ml-1">Decode</span>
-          </div>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Decode your metabolism.</p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700/60 shadow-sm p-8">

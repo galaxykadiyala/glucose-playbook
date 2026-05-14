@@ -140,14 +140,14 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-slate-100 dark:border-slate-700/60">
         <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
-          <svg className="w-4.5 h-4.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 17l4-8 4 5 3-3 4 6" />
-          </svg>
+          <span
+            className="text-white font-medium leading-none"
+            style={{ fontSize: '14px', letterSpacing: '-0.5px' }}
+          >
+            G
+          </span>
         </div>
-        <div>
-          <div className="font-bold text-slate-900 dark:text-slate-100 text-sm leading-tight">Glucose</div>
-          <div className="font-bold text-blue-600 text-sm leading-tight">Decode</div>
-        </div>
+        <div className="font-medium text-slate-900 dark:text-slate-100 text-base leading-tight">Glyco</div>
       </div>
 
       {/* Navigation */}

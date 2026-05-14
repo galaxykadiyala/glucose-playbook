@@ -42,7 +42,7 @@ async function handleLinkCode(code, whatsappNumber) {
 
   if (lookupError || !existing) {
     console.log('Link lookup miss', { code: normalized, err: lookupError?.code })
-    return twiml('Invalid code. Please generate a fresh code in the Glucose Decode app.')
+    return twiml('Invalid code. Please generate a fresh code in the Glyco app.')
   }
 
   // Clear whatsapp_number on any OTHER row that owns it — otherwise the
@@ -166,7 +166,7 @@ export default async function handler(req, res) {
   const userLink = await getUserByWhatsApp(from)
   if (!userLink) {
     return sendTwiml(res, twiml(
-      'Your WhatsApp is not linked. Open the Glucose Decode app, go to WhatsApp Connect, and send the 6-character code shown there.'
+      'Your WhatsApp is not linked. Open the Glyco app, go to WhatsApp Connect, and send the 6-character code shown there.'
     ))
   }
   const userId = userLink.user_id

@@ -364,7 +364,7 @@ export default function Dashboard() {
       {/* ── Hero Section ── */}
       <div className="mb-6">
         <div className="mb-4">
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Glucose Decode</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Glyco</h1>
           <p className="text-sm text-slate-500 mt-1">
             {meals.length} meals · {meals[0]?.date ?? '—'} → {meals[meals.length - 1]?.date ?? '—'}
           </p>
