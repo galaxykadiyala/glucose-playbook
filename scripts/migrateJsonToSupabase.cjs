@@ -46,13 +46,19 @@ async function batchInsert(table, rows, size = 500) {
 }
 
 async function insertReadings(stintId, rows) {
-  const { data: existing, error: readErr } = await supabase
-    .from('cgm_readings')
-    .select('timestamp')
-    .eq('stint_id', stintId)
-  if (readErr) throw readErr
-  const existingSet = new Set(existing.map((r) => r.timestamp))
-  const inserts = rows.filter((r) => !existingSet.has(r.timestamp))
+  const existingSet = new Set()
+  const PAGE = 1000
+  for (let offset = 0; ; offset += PAGE) {
+    const { data, error } = await supabase
+      .from('cgm_readings')
+      .select('timestamp')
+      .eq('stint_id', stintId)
+      .range(offset, offset + PAGE - 1)
+    if (error) throw error
+    for (const r of data) existingSet.add(new Date(r.timestamp).toISOString())
+    if (data.length < PAGE) break
+  }
+  const inserts = rows.filter((r) => !existingSet.has(new Date(r.timestamp).toISOString()))
   if (!inserts.length) return 0
   await batchInsert('cgm_readings', inserts.map((r) => ({ ...r, stint_id: stintId, user_id: userId })))
   return inserts.length
