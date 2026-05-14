@@ -40,6 +40,8 @@ function buildMealFromRow(row, readings) {
 
   const spike = peak != null ? peak > SPIKE_THRESHOLD : false
 
+  const seedMatch = /^seed:(meal_\d+)/.exec(row.notes || '')
+
   return {
     id: row.id,
     datetime: row.timestamp,
@@ -63,6 +65,7 @@ function buildMealFromRow(row, readings) {
     spike_severity: severityFor(peak),
     tags: row.tags ?? [],
     notes: row.notes ?? '',
+    seedId: seedMatch ? seedMatch[1] : null,
     label: row.food_items ?? '',
     _hasGlucoseData: peak != null,
   }

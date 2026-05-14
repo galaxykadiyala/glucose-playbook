@@ -320,11 +320,12 @@ export default function Dashboard() {
     return () => { cancelled = true }
   }, [user])
 
+  const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
+
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
   if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
   if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
-  const insights = useMemo(() => analyseDataset(meals), [meals])
   const { stats, patterns, strategy_effectiveness, top_spike_causes, food_rankings } = insights
 
   const bestStrategy = strategy_effectiveness

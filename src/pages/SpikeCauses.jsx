@@ -83,6 +83,7 @@ const CAUSE_DEFS = [
 
 function useCauses(meals) {
   return useMemo(() => {
+    if (!meals) return null
     const spikedMeals = meals.filter(m => m.spike)
 
     return CAUSE_DEFS.map(def => {
@@ -99,8 +100,8 @@ function useCauses(meals) {
         frequency,
         mealCount:     matchedSpikes.length,
         avgDelta,
-        spikedMeals:   def.spikeIds.map(id => meals.find(m => m.id === id)).filter(Boolean),
-        controlledMeal: def.controlId ? meals.find(m => m.id === def.controlId) : null,
+        spikedMeals:   def.spikeIds.map(id => meals.find(m => m.seedId === id)).filter(Boolean),
+        controlledMeal: def.controlId ? meals.find(m => m.seedId === def.controlId) : null,
       }
     })
   }, [meals])
@@ -442,10 +443,11 @@ export default function SpikeCauses() {
     return () => { cancelled = true }
   }, [user])
 
+  const causes = useCauses(loadedMeals)
+
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
   if (!loadedMeals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
   if (!loadedMeals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
-  const causes = useCauses(loadedMeals)
 
   return (
     <div>

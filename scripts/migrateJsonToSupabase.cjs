@@ -84,13 +84,12 @@ async function insertMeals() {
 }
 
 async function main() {
-  const dates = readings.sampleDay.readings.map((r) => r.time).sort()
-  const start = dates[0]
-  const end = dates[dates.length - 1]
-  console.log(`[${apply ? 'APPLY' : 'DRY-RUN'}] Seed glucose (${start} to ${end})`)
+  const day = readings.sampleDay.date
+  const meta = readings.metadata
+  console.log(`[${apply ? 'APPLY' : 'DRY-RUN'}] Seed glucose (${meta.startDate} to ${meta.endDate})`)
 
-  const legacyStint = { name: `Legacy Glucose ${start} to ${end}`, start_date: start.slice(0, 10), end_date: end.slice(0, 10), sensor_type: 'Legacy' }
-  const sampleRows = readings.sampleDay.readings.map((r) => ({ timestamp: r.time, glucose_value: r.value, event_label: null }))
+  const legacyStint = { name: `Legacy Glucose ${meta.startDate} to ${meta.endDate}`, start_date: meta.startDate, end_date: meta.endDate, sensor_type: 'Legacy' }
+  const sampleRows = readings.sampleDay.readings.map((r) => ({ timestamp: `${day}T${r.time}:00Z`, glucose_value: r.value, event_label: null }))
 
   const stintRows = [
     { name: 'Stint 2', start_date: stint2.metadata.startDate, end_date: stint2.metadata.endDate, sensor_type: 'Freestyle Libre', rows: stint2.readings.map((r) => ({ timestamp: r.timestamp, glucose_value: r.value, event_label: null })) },
