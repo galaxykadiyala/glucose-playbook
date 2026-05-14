@@ -17,14 +17,14 @@ import Card, { CardHeader } from '../components/ui/Card'
 function PriorityIcon({ priority }) {
   if (priority === 'critical')     return <span className="text-red-500 font-bold text-xs flex-shrink-0">⚠</span>
   if (priority === 'moderate')     return <span className="text-amber-500 font-bold text-xs flex-shrink-0">→</span>
-  return                                  <span className="text-blue-400 font-bold text-xs flex-shrink-0">ℹ</span>
+  return                                  <span className="text-plum-400 font-bold text-xs flex-shrink-0">ℹ</span>
 }
 
 function PriorityBadge({ priority }) {
   const map = {
     critical:      { bg: '#FEF2F2', text: '#DC2626', label: 'Critical' },
     moderate:      { bg: '#FFFBEB', text: '#D97706', label: 'Moderate' },
-    informational: { bg: '#EFF6FF', text: '#2563EB', label: 'Info' },
+    informational: { bg: '#EDE9FE', text: '#8B5CF6', label: 'Info' },
   }
   const s = map[priority] || map.informational
   return (
@@ -77,7 +77,7 @@ function ExecutiveSummarySection({ exec, comparisonInsights }) {
                 ? { bg: '#FEF2F2', border: '#FECACA', text: '#DC2626' }
                 : ins.priority === 'moderate'
                 ? { bg: '#FFFBEB', border: '#FDE68A', text: '#D97706' }
-                : { bg: '#EFF6FF', border: '#BFDBFE', text: '#2563EB' }
+                : { bg: '#EDE9FE', border: '#DDD6FE', text: '#8B5CF6' }
               return (
                 <div key={i} className="flex items-start gap-2 px-3 py-2 rounded-lg border text-xs leading-relaxed"
                   style={{ backgroundColor: s.bg, borderColor: s.border, color: s.text }}>
@@ -127,7 +127,7 @@ function TrendSmoothingChart({ trendData }) {
             formatter={(v, n) => [v ? `${v} mg/dL` : '—', { actual: 'Daily', avg3: '3-day avg', avg7: '7-day avg' }[n] || n]} />
           <Line type="monotone" dataKey="actual" stroke="#CBD5E1" strokeWidth={1} dot={false} isAnimationActive={false} />
           <Line type="monotone" dataKey="avg3"   stroke="#F59E0B" strokeWidth={2} dot={false} isAnimationActive={false} />
-          <Line type="monotone" dataKey="avg7"   stroke="#3B82F6" strokeWidth={2.5} dot={false} isAnimationActive={false} />
+          <Line type="monotone" dataKey="avg7"   stroke="#8B5CF6" strokeWidth={2.5} dot={false} isAnimationActive={false} />
           <Legend formatter={n => ({ actual: 'Daily', avg3: '3-day avg', avg7: '7-day avg' }[n] || n)}
             iconSize={10} wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
         </LineChart>
@@ -146,7 +146,7 @@ function ScoreBreakdownChart({ scoreBreakdowns }) {
     total:       d.score,
   }))
 
-  const COLORS = { tir: '#22C55E', avg_glucose: '#3B82F6', variability: '#F59E0B', spikes: '#EF4444' }
+  const COLORS = { tir: '#22C55E', avg_glucose: '#8B5CF6', variability: '#F59E0B', spikes: '#EF4444' }
 
   return (
     <div>
@@ -343,7 +343,7 @@ function PrioritizedInsightsSection({ prioritized }) {
   const styles = {
     critical:      { bg: '#FEF2F2', border: '#FECACA', text: '#DC2626', hdr: '#FEE2E2', label: 'Critical' },
     moderate:      { bg: '#FFFBEB', border: '#FDE68A', text: '#D97706', hdr: '#FEF3C7', label: 'Moderate' },
-    informational: { bg: '#EFF6FF', border: '#BFDBFE', text: '#2563EB', hdr: '#DBEAFE', label: 'Informational' },
+    informational: { bg: '#EDE9FE', border: '#DDD6FE', text: '#8B5CF6', hdr: '#DDD6FE', label: 'Informational' },
   }
 
   return (
@@ -517,7 +517,7 @@ function InsightTag({ type, text }) {
     success: { bg: '#F0FDF4', border: '#BBF7D0', text: '#15803D', icon: '✓' },
     danger:  { bg: '#FEF2F2', border: '#FECACA', text: '#DC2626', icon: '✗' },
     warning: { bg: '#FFFBEB', border: '#FDE68A', text: '#D97706', icon: '⚠' },
-    info:    { bg: '#EFF6FF', border: '#BFDBFE', text: '#2563EB', icon: 'ℹ' },
+    info:    { bg: '#EDE9FE', border: '#DDD6FE', text: '#8B5CF6', icon: 'ℹ' },
   }
   const s = styles[type] || styles.info
   return (
@@ -575,7 +575,7 @@ function OvernightChart({ readings, overnightMeta }) {
     <div>
       <div className="grid grid-cols-4 gap-2 mb-3">
         <StatBox label="Avg"  value={overnightMeta.avg_overnight}  unit=" mg/dL" />
-        <StatBox label="Low"  value={overnightMeta.min_overnight}  unit=" mg/dL" color="#3B82F6" />
+        <StatBox label="Low"  value={overnightMeta.min_overnight}  unit=" mg/dL" color="#8B5CF6" />
         <StatBox label="High" value={overnightMeta.max_overnight}  unit=" mg/dL"
           color={overnightMeta.max_overnight > 160 ? '#DC2626' : '#64748B'} />
         <StatBox label="SD"   value={overnightMeta.variability_sd} color="#8B5CF6" />
@@ -650,7 +650,7 @@ function ScoreTrend({ dailySummaries }) {
           labelFormatter={shortDate} />
         <Line type="monotone" dataKey="score"      stroke="#CBD5E1" strokeWidth={1.5}
           dot={{ r: 3, fill: '#fff', stroke: '#CBD5E1', strokeWidth: 1.5 }} isAnimationActive={false} />
-        <Line type="monotone" dataKey="rollingAvg" stroke="#3B82F6" strokeWidth={2.5} dot={false} isAnimationActive={false} />
+        <Line type="monotone" dataKey="rollingAvg" stroke="#8B5CF6" strokeWidth={2.5} dot={false} isAnimationActive={false} />
       </LineChart>
     </ResponsiveContainer>
   )
@@ -748,8 +748,8 @@ function ComparisonPanel() {
           <thead>
             <tr className="border-b border-slate-100">
               <th className="text-left py-2 pr-4 text-slate-400 font-medium">Metric</th>
-              <th className="text-center py-2 px-3 text-blue-600 font-semibold">Stint 2</th>
-              <th className="text-center py-2 px-3 text-purple-600 font-semibold">Stint 3</th>
+              <th className="text-center py-2 px-3 text-plum-500 font-semibold">Stint 2</th>
+              <th className="text-center py-2 px-3 text-honey-600 font-semibold">Stint 3</th>
               <th className="text-center py-2 pl-3 text-slate-400 font-medium">Change</th>
             </tr>
           </thead>
@@ -775,7 +775,7 @@ function ComparisonPanel() {
 
       {/* Score trend comparison */}
       <div className="mb-5">
-        <p className="text-[11px] text-slate-500 mb-2">Score trend — Stint 2 <span className="text-blue-500">vs</span> Stint 3 <span className="text-purple-500">(by day index)</span></p>
+        <p className="text-[11px] text-slate-500 mb-2">Score trend — Stint 2 <span className="text-plum-500">vs</span> Stint 3 <span className="text-honey-500">(by day index)</span></p>
         <ResponsiveContainer width="100%" height={130}>
           <LineChart data={score_comparison} margin={{ top: 4, right: 8, bottom: 0, left: -20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
@@ -786,8 +786,8 @@ function ComparisonPanel() {
             <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }}
               formatter={(v, n) => [v ?? '—', n === 'phase_2' ? 'Stint 2' : 'Stint 3']}
               labelFormatter={d => `Day ${d}`} />
-            <Line type="monotone" dataKey="phase_2" stroke="#3B82F6" strokeWidth={2} dot={false} connectNulls isAnimationActive={false} />
-            <Line type="monotone" dataKey="phase_3" stroke="#8B5CF6" strokeWidth={2} dot={false} connectNulls isAnimationActive={false} strokeDasharray="4 2" />
+            <Line type="monotone" dataKey="phase_2" stroke="#8B5CF6" strokeWidth={2} dot={false} connectNulls isAnimationActive={false} />
+            <Line type="monotone" dataKey="phase_3" stroke="#F59E0B" strokeWidth={2} dot={false} connectNulls isAnimationActive={false} strokeDasharray="4 2" />
             <Legend formatter={n => n === 'phase_2' ? 'Stint 2' : 'Stint 3'} iconSize={10}
               wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
           </LineChart>
@@ -804,8 +804,8 @@ function ComparisonPanel() {
             <YAxis domain={[80, 140]} tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
             <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }}
               formatter={(v, n) => [`${v} mg/dL`, n === 'phase_2' ? 'Stint 2' : 'Stint 3']} />
-            <Bar dataKey="phase_2" fill="#3B82F6" radius={[4, 4, 0, 0]} barSize={20} isAnimationActive={false} />
-            <Bar dataKey="phase_3" fill="#8B5CF6" radius={[4, 4, 0, 0]} barSize={20} isAnimationActive={false} />
+            <Bar dataKey="phase_2" fill="#8B5CF6" radius={[4, 4, 0, 0]} barSize={20} isAnimationActive={false} />
+            <Bar dataKey="phase_3" fill="#F59E0B" radius={[4, 4, 0, 0]} barSize={20} isAnimationActive={false} />
             <Legend formatter={n => n === 'phase_2' ? 'Stint 2' : 'Stint 3'} iconSize={10}
               wrapperStyle={{ fontSize: 11, paddingTop: 4 }} />
           </BarChart>
@@ -829,7 +829,7 @@ function DayRow({ day, isSelected, onSelect }) {
   return (
     <button onClick={() => onSelect(day.date)}
       className={`w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
-        isSelected ? 'bg-blue-50 border border-blue-200' : 'hover:bg-slate-50 border border-transparent'
+        isSelected ? 'bg-plum-100 border border-plum-200' : 'hover:bg-slate-50 border border-transparent'
       }`}
     >
       <ScoreDial score={day.score} size="sm" />
@@ -901,7 +901,7 @@ export default function DailyIntelligence() {
         <div className="flex gap-2">
           <button onClick={() => setActiveTab('overview')}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-              activeTab === 'overview' ? 'bg-blue-600 text-white' : 'bg-white border border-slate-200 text-slate-600'
+              activeTab === 'overview' ? 'bg-plum-500 text-white' : 'bg-white border border-slate-200 text-slate-600'
             }`}>
             Overview
           </button>
@@ -913,7 +913,7 @@ export default function DailyIntelligence() {
           </button>
           <button onClick={() => setActiveTab('compare')}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-              activeTab === 'compare' ? 'bg-purple-600 text-white' : 'bg-white border border-slate-200 text-slate-600'
+              activeTab === 'compare' ? 'bg-honey-600 text-white' : 'bg-white border border-slate-200 text-slate-600'
             }`}>
             Comparison
           </button>
@@ -961,7 +961,7 @@ export default function DailyIntelligence() {
                   <div className="flex items-center gap-2 mb-1">
                     <h2 className="text-base font-semibold text-slate-900">{shortDate(displayDay.date)}</h2>
                     {displayDay.date === latestDay.date && (
-                      <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">Latest</span>
+                      <span className="text-[10px] bg-plum-100 text-plum-500 px-2 py-0.5 rounded-full">Latest</span>
                     )}
                     {displayDay.date === best_days[0]?.date && (
                       <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">Best day</span>

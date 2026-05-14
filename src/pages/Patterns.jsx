@@ -33,12 +33,6 @@ function HourlyAreaChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
       <AreaChart data={data} margin={{ top: 10, right: 16, bottom: 0, left: -10 }}>
-        <defs>
-          <linearGradient id="avgGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#3B82F6" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
-          </linearGradient>
-        </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
         <XAxis dataKey="hour" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} interval={2} />
         <YAxis domain={[70, 170]} tick={{ fontSize: 11, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
@@ -48,9 +42,10 @@ function HourlyAreaChart({ data }) {
         <Area
           type="monotone"
           dataKey="avg"
-          stroke="#3B82F6"
+          stroke="#8B5CF6"
           strokeWidth={2.5}
-          fill="url(#avgGradient)"
+          fill="#EDE9FE"
+          fillOpacity={0.3}
           dot={false}
         />
       </AreaChart>
@@ -155,12 +150,12 @@ export default function Patterns() {
               onClick={() => setSelectedDay(i)}
               className={`flex-shrink-0 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                 selectedDay === i
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-plum-500 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
               <div>{day.label}</div>
-              <div className={`text-[10px] mt-0.5 ${selectedDay === i ? 'text-blue-200' : 'text-slate-400'}`}>
+              <div className={`text-[10px] mt-0.5 ${selectedDay === i ? 'text-plum-200' : 'text-slate-400'}`}>
                 {day.timeInRange}%
               </div>
             </button>
@@ -171,7 +166,7 @@ export default function Patterns() {
         <div className="grid grid-cols-4 gap-3 mb-5">
           {[
             { label: 'Time in Range', value: `${currentDay.timeInRange}%`, color: currentDay.timeInRange >= 80 ? '#22C55E' : '#F59E0B' },
-            { label: 'Average',       value: `${currentDay.avgGlucose}`, unit: 'mg/dL', color: '#3B82F6' },
+            { label: 'Average',       value: `${currentDay.avgGlucose}`, unit: 'mg/dL', color: '#8B5CF6' },
             { label: 'Max Glucose',   value: `${currentDay.maxGlucose}`, unit: 'mg/dL', color: currentDay.maxGlucose > 180 ? '#EF4444' : '#F59E0B' },
             { label: 'Est. A1C',      value: `${currentDay.estimatedA1c}%`, color: parseFloat(currentDay.estimatedA1c) < 5.7 ? '#22C55E' : '#F59E0B' },
           ].map((s, i) => (

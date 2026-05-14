@@ -17,9 +17,9 @@ import { getZone, ZONE_COLORS } from '../utils/glucoseZones'
 
 // ─── Stat card ────────────────────────────────────────────────────────────────
 
-function StatCard({ label, value, unit, sub, color, bg, icon }) {
+function StatCard({ label, value, unit, sub, color, bg, icon, tileBg = 'bg-white', tileBorder = 'border-slate-100' }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-card p-5 flex flex-col gap-3">
+    <div className={`${tileBg} rounded-2xl border ${tileBorder} shadow-card p-5 flex flex-col gap-3`}>
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</span>
         {icon && <span className="text-base">{icon}</span>}
@@ -47,13 +47,21 @@ function ZoneDot(props) {
   if (cx == null || cy == null || value == null) return null
   const zone  = getZone(value)
   const color = zone ? ZONE_COLORS[zone].stroke : '#94A3B8'
+  const isSpike = !!payload.spike
   return (
     <g>
-      {/* Outer ring for spike events */}
-      {payload.spike && (
-        <circle cx={cx} cy={cy} r={9} fill="none" stroke={color} strokeWidth={1.5} strokeOpacity={0.35} />
+      {/* Honey halo for spike events — soft amber glow behind the red dot */}
+      {isSpike && (
+        <circle cx={cx} cy={cy} r={8.5} fill="#FEF3C7" />
       )}
-      <circle cx={cx} cy={cy} r={4.5} fill={color} stroke="white" strokeWidth={2} />
+      <circle
+        cx={cx}
+        cy={cy}
+        r={4.5}
+        fill={isSpike ? '#EF4444' : color}
+        stroke="white"
+        strokeWidth={2}
+      />
     </g>
   )
 }
@@ -137,7 +145,7 @@ function GlucoseTimeline({ meals, insights }) {
               onClick={() => setView(opt.key)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 view === opt.key
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-plum-500 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -152,8 +160,9 @@ function GlucoseTimeline({ meals, insights }) {
           {/* Zones */}
           {view === 'peak' && (
             <>
-              <ReferenceArea y1={70}  y2={140} fill="#F0FDF4" fillOpacity={0.5} />
-              <ReferenceArea y1={140} y2={200} fill="#FEF2F2" fillOpacity={0.4} />
+              <ReferenceArea y1={70}  y2={140} fill="#DCFCE7" fillOpacity={0.5} />
+              <ReferenceArea y1={140} y2={180} fill="#FEF3C7" fillOpacity={0.5} />
+              <ReferenceArea y1={180} y2={200} fill="#FEE2E2" fillOpacity={0.5} />
             </>
           )}
           <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
@@ -179,7 +188,7 @@ function GlucoseTimeline({ meals, insights }) {
           <Line
             type="monotone"
             dataKey={dataKey}
-            stroke="#CBD5E1"
+            stroke="#8B5CF6"
             strokeWidth={1.5}
             dot={view === 'peak' ? <ZoneDot /> : false}
             activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
@@ -233,7 +242,7 @@ function InsightBadge({ type }) {
     danger:  { icon: '⚠', bg: 'bg-red-50',     text: 'text-red-700',     border: 'border-red-200'   },
     warning: { icon: '!',  bg: 'bg-amber-50',   text: 'text-amber-700',   border: 'border-amber-200' },
     success: { icon: '✓',  bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200'},
-    info:    { icon: 'i',  bg: 'bg-blue-50',    text: 'text-blue-700',    border: 'border-blue-200'  },
+    info:    { icon: 'i',  bg: 'bg-plum-100',   text: 'text-plum-800',    border: 'border-plum-200'  },
   }
   const c = cfg[type] || cfg.info
   return (
@@ -248,7 +257,7 @@ function PatternCard({ pattern }) {
     danger:  'border-red-200 bg-red-50/60',
     warning: 'border-amber-200 bg-amber-50/60',
     success: 'border-emerald-200 bg-emerald-50/60',
-    info:    'border-blue-200 bg-blue-50/60',
+    info:    'border-plum-200 bg-plum-100/60',
   }
   return (
     <div className={`rounded-xl border p-4 ${borderMap[pattern.type] || borderMap.info}`}>
@@ -308,7 +317,7 @@ export default function Dashboard() {
   const insights = useMemo(() => (meals ? analyseDataset(meals) : null), [meals])
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
-  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-500 rounded-full animate-spin" /></div>
   if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
   const { stats, patterns, strategy_effectiveness, top_spike_causes, food_rankings } = insights
@@ -327,35 +336,43 @@ export default function Dashboard() {
       value: stats.avgPeak,
       unit: 'mg/dL',
       sub: stats.avgPeak > 140 ? 'Above safe target' : 'Within range',
-      color: stats.avgPeak > 140 ? '#F97316' : '#22C55E',
-      bg: stats.avgPeak > 140 ? '#FFF7ED' : '#F0FDF4',
+      color: '#5B21B6',
+      bg: '#EDE9FE',
       icon: '📈',
+      tileBg: 'bg-plum-50',
+      tileBorder: 'border-plum-100',
     },
     {
       label: 'Spike Rate',
       value: `${stats.spikeRate}%`,
       sub: `${stats.spikeCount} of ${stats.count} meals`,
-      color: stats.spikeRate > 50 ? '#EF4444' : '#F59E0B',
-      bg: stats.spikeRate > 50 ? '#FEF2F2' : '#FFFBEB',
+      color: '#92400E',
+      bg: '#FEF3C7',
       icon: '⚡',
+      tileBg: 'bg-honey-50',
+      tileBorder: 'border-honey-100',
     },
     {
       label: 'Best Strategy',
       value: bestStrategy ? `${bestStrategy.spikeRate}%` : '—',
       unit: 'spike rate',
       sub: bestStrategy?.label || '—',
-      color: '#3B82F6',
-      bg: '#EFF6FF',
+      color: '#166534',
+      bg: '#F0FDF4',
       icon: '🏆',
+      tileBg: 'bg-green-50',
+      tileBorder: 'border-green-100',
     },
     {
       label: 'Avg Delta',
       value: stats.avgDelta,
       unit: 'mg/dL',
       sub: stats.avgDelta > 50 ? 'High variability' : 'Moderate',
-      color: deltaColor(stats.avgDelta),
-      bg: '#F8FAFC',
+      color: '#92400E',
+      bg: '#FEF3C7',
       icon: '↕',
+      tileBg: 'bg-honey-50',
+      tileBorder: 'border-honey-100',
     },
   ]
 
@@ -364,7 +381,7 @@ export default function Dashboard() {
       {/* ── Hero Section ── */}
       <div className="mb-6">
         <div className="mb-4">
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Glucose Decode</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Glyco</h1>
           <p className="text-sm text-slate-500 mt-1">
             {meals.length} meals · {meals[0]?.date ?? '—'} → {meals[meals.length - 1]?.date ?? '—'}
           </p>

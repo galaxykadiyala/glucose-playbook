@@ -108,16 +108,16 @@ function NavItem({ item }) {
       <NavLink
         to={item.to}
         className={({ isActive }) =>
-          `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+          `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors border-l-[3px] ${
             isActive
-              ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
-              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+              ? 'bg-plum-100 dark:bg-plum-900/40 text-plum-800 dark:text-plum-300 border-plum-500'
+              : 'border-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
           }`
         }
       >
         {({ isActive }) => (
           <>
-            <span className={isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}>
+            <span className={isActive ? 'text-plum-500 dark:text-plum-400' : 'text-slate-400 dark:text-slate-500'}>
               {item.icon}
             </span>
             <span className="flex-1">{item.label}</span>
@@ -139,15 +139,15 @@ export default function Sidebar() {
     <aside className="hidden md:flex w-60 flex-shrink-0 flex-col bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-700/60 h-screen sticky top-0">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-5 py-5 border-b border-slate-100 dark:border-slate-700/60">
-        <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
-          <svg className="w-4.5 h-4.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 17l4-8 4 5 3-3 4 6" />
-          </svg>
+        <div className="w-8 h-8 rounded-lg bg-plum-500 flex items-center justify-center flex-shrink-0">
+          <span
+            className="text-white font-medium leading-none"
+            style={{ fontSize: '14px', letterSpacing: '-0.5px' }}
+          >
+            G
+          </span>
         </div>
-        <div>
-          <div className="font-bold text-slate-900 dark:text-slate-100 text-sm leading-tight">Glucose</div>
-          <div className="font-bold text-blue-600 text-sm leading-tight">Decode</div>
-        </div>
+        <div className="font-medium text-slate-900 dark:text-slate-100 text-base leading-tight">Glyco</div>
       </div>
 
       {/* Navigation */}

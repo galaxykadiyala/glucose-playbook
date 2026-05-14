@@ -55,7 +55,7 @@ export default function Signup() {
             We sent a confirmation link to <span className="font-medium text-slate-700 dark:text-slate-300">{email}</span>.
             Click it to activate your account.
           </p>
-          <Link to="/login" className="text-sm font-medium text-blue-600 hover:text-blue-700">
+          <Link to="/login" className="text-sm font-medium text-plum-500 hover:text-plum-600">
             Back to sign in
           </Link>
         </div>
@@ -67,16 +67,19 @@ export default function Signup() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="flex items-center gap-2.5 justify-center mb-8">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 17l4-8 4 5 3-3 4 6" />
-            </svg>
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex items-center gap-2.5 justify-center">
+            <div className="w-9 h-9 rounded-xl bg-plum-500 flex items-center justify-center">
+              <span
+                className="text-white font-medium leading-none"
+                style={{ fontSize: '18px', letterSpacing: '-0.5px' }}
+              >
+                G
+              </span>
+            </div>
+            <span className="font-medium text-slate-900 dark:text-slate-100 text-lg leading-tight">Glyco</span>
           </div>
-          <div>
-            <span className="font-bold text-slate-900 dark:text-slate-100 text-lg leading-tight">Glucose</span>
-            <span className="font-bold text-blue-600 text-lg leading-tight ml-1">Decode</span>
-          </div>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Decode your metabolism.</p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700/60 shadow-sm p-8">
@@ -100,7 +103,7 @@ export default function Signup() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-500 focus:border-transparent transition"
                 placeholder="you@example.com"
               />
             </div>
@@ -114,7 +117,7 @@ export default function Signup() {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-500 focus:border-transparent transition"
                 placeholder="At least 8 characters"
               />
             </div>
@@ -128,7 +131,7 @@ export default function Signup() {
                 required
                 value={confirm}
                 onChange={e => setConfirm(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-500 focus:border-transparent transition"
                 placeholder="••••••••"
               />
             </div>
@@ -136,7 +139,7 @@ export default function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors"
+              className="w-full py-2.5 px-4 bg-plum-500 hover:bg-plum-600 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors"
             >
               {loading ? 'Creating account…' : 'Create account'}
             </button>
@@ -163,7 +166,7 @@ export default function Signup() {
 
           <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
             Already have an account?{' '}
-            <Link to="/login" className="font-medium text-blue-600 hover:text-blue-700">
+            <Link to="/login" className="font-medium text-plum-500 hover:text-plum-600">
               Sign in
             </Link>
           </p>

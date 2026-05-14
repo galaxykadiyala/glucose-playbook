@@ -27,8 +27,8 @@ function EffectivenessRadar({ data }) {
         <PolarAngleAxis dataKey="name" tick={{ fontSize: 10, fill: '#64748B' }} />
         <Radar
           dataKey="value"
-          stroke="#3B82F6"
-          fill="#3B82F6"
+          stroke="#8B5CF6"
+          fill="#8B5CF6"
           fillOpacity={0.15}
           strokeWidth={2}
         />
@@ -45,7 +45,7 @@ function SortBar({ topStrategies }) {
   return (
     <div className="space-y-2.5">
       {topStrategies.map((s, i) => {
-        const color = s.effectiveness >= 85 ? '#22C55E' : s.effectiveness >= 70 ? '#3B82F6' : '#F59E0B'
+        const color = s.effectiveness >= 85 ? '#22C55E' : s.effectiveness >= 70 ? '#8B5CF6' : '#F59E0B'
         return (
           <div key={s.id} className="flex items-center gap-3">
             <span className="w-5 text-xs text-slate-400 font-mono text-right flex-shrink-0">{i + 1}</span>
@@ -113,7 +113,7 @@ export default function Strategies() {
       {/* Quick stat row */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         {[
-          { label: 'Total Strategies', value: strategies.length, color: '#3B82F6' },
+          { label: 'Total Strategies', value: strategies.length, color: '#8B5CF6' },
           { label: 'Strong Evidence', value: strategies.filter(s => s.evidence === 'strong').length, color: '#22C55E' },
           { label: 'Avg Effectiveness', value: `${Math.round(strategies.reduce((s, a) => s + a.effectiveness, 0) / strategies.length)}%`, color: '#F59E0B' },
         ].map((s, i) => (
@@ -132,12 +132,12 @@ export default function Strategies() {
             onClick={() => setActiveCategory(cat)}
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               activeCategory === cat
-                ? 'bg-blue-600 text-white'
+                ? 'bg-plum-500 text-white'
                 : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300'
             }`}
           >
             {cat}
-            <span className={`ml-1.5 ${activeCategory === cat ? 'text-blue-200' : 'text-slate-400'}`}>
+            <span className={`ml-1.5 ${activeCategory === cat ? 'text-plum-200' : 'text-slate-400'}`}>
               {cat === 'All' ? strategies.length : strategies.filter(s => s.categoryLabel === cat).length}
             </span>
           </button>

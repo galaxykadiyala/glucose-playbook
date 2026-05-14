@@ -29,8 +29,8 @@ export function useStats() {
         unit:      'mg/dL',
         sublabel:  '7-day average',
         trend:     weekSummary.avgGlucose < 115 ? 'good' : 'warn',
-        color:     weekSummary.avgGlucose < 115 ? '#3B82F6' : '#F59E0B',
-        bg:        '#EFF6FF',
+        color:     weekSummary.avgGlucose < 115 ? '#8B5CF6' : '#F59E0B',
+        bg:        '#EDE9FE',
       },
       {
         id:        'a1c',

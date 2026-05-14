@@ -164,7 +164,7 @@ export default function CSVUpload({ onSuccess }) {
           </svg>
         </div>
         <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-1">Upload complete</h3>
-        <p className="text-sm font-medium text-blue-600 mb-3">{done.stintName}</p>
+        <p className="text-sm font-medium text-plum-500 mb-3">{done.stintName}</p>
         <dl className="grid grid-cols-2 gap-3 text-left mb-5">
           <div className="bg-slate-50 dark:bg-slate-800 rounded-lg px-3 py-2">
             <dt className="text-[10px] text-slate-400 uppercase tracking-wide">Readings</dt>
@@ -181,7 +181,7 @@ export default function CSVUpload({ onSuccess }) {
         </dl>
         <button
           onClick={reset}
-          className="text-sm font-medium text-blue-600 hover:text-blue-700"
+          className="text-sm font-medium text-plum-500 hover:text-plum-500"
         >
           Upload another file
         </button>
@@ -221,7 +221,7 @@ export default function CSVUpload({ onSuccess }) {
             value={stintName}
             onChange={e => setStintName(e.target.value)}
             placeholder="e.g. Feb–Mar 2026"
-            className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            className="w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-plum-500 focus:border-transparent transition"
           />
         </div>
 
@@ -237,7 +237,7 @@ export default function CSVUpload({ onSuccess }) {
             </div>
             <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
               <div
-                className="h-full bg-blue-500 rounded-full transition-all"
+                className="h-full bg-plum-500 rounded-full transition-all"
                 style={{ width: `${Math.round((progress.done / progress.total) * 100)}%` }}
               />
             </div>
@@ -255,7 +255,7 @@ export default function CSVUpload({ onSuccess }) {
           <button
             onClick={handleConfirm}
             disabled={!!progress}
-            className="flex-1 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold transition-colors"
+            className="flex-1 py-2.5 rounded-lg bg-plum-500 hover:bg-plum-600 disabled:opacity-60 text-white text-sm font-semibold transition-colors"
           >
             {progress ? 'Uploading…' : 'Upload'}
           </button>
@@ -278,8 +278,8 @@ export default function CSVUpload({ onSuccess }) {
         onDragLeave={onDragLeave}
         className={`w-full rounded-2xl border-2 border-dashed p-10 flex flex-col items-center gap-3 transition-colors cursor-pointer ${
           dragging
-            ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20'
-            : 'border-slate-200 dark:border-slate-700 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+            ? 'border-plum-400 bg-plum-100 dark:bg-plum-900/20'
+            : 'border-slate-200 dark:border-slate-700 hover:border-plum-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
         }`}
       >
         <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">

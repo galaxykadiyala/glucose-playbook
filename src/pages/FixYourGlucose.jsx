@@ -355,12 +355,12 @@ function PhaseChangePanel() {
             ))}
           </ul>
         </div>
-        <div className="rounded-xl bg-blue-50 border border-blue-100 p-3">
-          <div className="text-xs font-bold text-blue-700 mb-2">Physiological Factors</div>
+        <div className="rounded-xl bg-plum-100 border border-plum-200 p-3">
+          <div className="text-xs font-bold text-plum-800 mb-2">Physiological Factors</div>
           <ul className="space-y-1">
             {phaseChange.physiological_factors.map((f, i) => (
-              <li key={i} className="text-xs text-blue-800 flex items-start gap-1.5">
-                <span className="text-blue-400 flex-shrink-0 mt-0.5">•</span>{f}
+              <li key={i} className="text-xs text-plum-800 flex items-start gap-1.5">
+                <span className="text-plum-400 flex-shrink-0 mt-0.5">•</span>{f}
               </li>
             ))}
           </ul>

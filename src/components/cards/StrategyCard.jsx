@@ -3,7 +3,7 @@ import Badge from '../ui/Badge'
 import { getEvidenceLabel, getEfforLabel, getCategoryColor } from '../../utils/formatters'
 
 function EffectivenessBar({ value }) {
-  const color = value >= 85 ? '#22C55E' : value >= 70 ? '#3B82F6' : '#F59E0B'
+  const color = value >= 85 ? '#22C55E' : value >= 70 ? '#8B5CF6' : '#F59E0B'
   return (
     <div className="flex items-center gap-2">
       <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -64,7 +64,7 @@ export default function StrategyCard({ strategy }) {
           <ul className="space-y-1.5">
             {howTo.slice(0, 3).map((tip, i) => (
               <li key={i} className="flex items-start gap-2 text-xs text-slate-600">
-                <span className="mt-0.5 w-4 h-4 rounded-full bg-blue-100 text-blue-600 text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                <span className="mt-0.5 w-4 h-4 rounded-full bg-plum-100 text-plum-500 text-[10px] font-bold flex items-center justify-center flex-shrink-0">
                   {i + 1}
                 </span>
                 {tip}

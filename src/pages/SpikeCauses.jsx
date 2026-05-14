@@ -48,7 +48,7 @@ const CAUSE_DEFS = [
     title: 'Lack of Fibre',
     icon: '🥬',
     color: '#8B5CF6',
-    light: '#F5F3FF',
+    light: '#EDE9FE',
     border: '#DDD6FE',
     explanation:
       'Meals without fibre-rich vegetables, legumes, or a fibre supplement (chia/methi) have nothing to slow glucose absorption. Fibre creates a physical gel in the gut that forces digestion to slow down, effectively lowering the glycemic index of everything else in the meal.',
@@ -196,7 +196,7 @@ function MealCard({ meal, variant = 'spike' }) {
           {(meal.pre_meal?.length > 0 || meal.post_meal?.length > 0) && (
             <div className="flex flex-wrap gap-1 mt-2">
               {meal.pre_meal?.map((p, i) => (
-                <span key={i} className="px-1.5 py-0.5 rounded-md bg-blue-100 text-blue-700 text-[10px] font-medium">
+                <span key={i} className="px-1.5 py-0.5 rounded-md bg-plum-100 text-plum-800 text-[10px] font-medium">
                   Pre: {p.item || p}
                 </span>
               ))}
@@ -407,7 +407,7 @@ function SummaryStats({ causes, meals }) {
       value: causes.length,
       unit: 'distinct patterns',
       color: '#8B5CF6',
-      bg: '#F5F3FF',
+      bg: '#EDE9FE',
     },
   ]
 
@@ -431,7 +431,7 @@ export default function SpikeCauses() {
   const causes = useCauses(loadedMeals)
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
-  if (!loadedMeals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!loadedMeals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-500 rounded-full animate-spin" /></div>
   if (!loadedMeals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
   return (

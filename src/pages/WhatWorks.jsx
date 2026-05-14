@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
+import { BarChart, Bar, Cell, XAxis, YAxis, ResponsiveContainer, ReferenceLine, LineChart, Line, Tooltip } from 'recharts'
 import { analyseDataset, detectStabilisers } from '../utils/insightsEngine'
 import { useStint } from '../context/StintContext'
 import Card, { CardHeader } from '../components/ui/Card'
@@ -83,7 +83,7 @@ function ComparisonCard({ meal, side }) {
       {(meal.pre_meal.length > 0 || meal.post_meal.length > 0) ? (
         <div className="mt-2 flex flex-wrap gap-1">
           {meal.pre_meal.map((p, i) => (
-            <span key={i} className="text-[10px] bg-blue-50 text-blue-700 rounded-full px-2 py-0.5">
+            <span key={i} className="text-[10px] bg-plum-100 text-plum-800 rounded-full px-2 py-0.5">
               Pre: {p.item}
             </span>
           ))}
@@ -141,7 +141,7 @@ function StrategyCard({ strategy }) {
           <div className="text-[10px] text-slate-400">spike rate</div>
         </div>
         <div className="bg-slate-50 rounded-lg p-2.5 text-center">
-          <div className="text-base font-bold text-blue-600">-{peakDiff}</div>
+          <div className="text-base font-bold text-plum-500">-{peakDiff}</div>
           <div className="text-[10px] text-slate-400">mg/dL peak</div>
         </div>
         <div className="bg-slate-50 rounded-lg p-2.5 text-center">
@@ -161,7 +161,11 @@ function StrategyCard({ strategy }) {
               formatter={(v) => [`${v}%`, 'Spike rate']}
               contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #E2E8F0' }}
             />
-            <Bar dataKey="spikeRate" radius={[0, 4, 4, 0]} fill={color} barSize={18} />
+            <Bar dataKey="spikeRate" radius={[0, 4, 4, 0]} barSize={18}>
+              {barData.map((d) => (
+                <Cell key={d.name} fill={d.name === 'Without' ? '#F59E0B' : color} />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -206,7 +210,7 @@ export default function WhatWorks() {
   const se = insights?.strategy_effectiveness || []
 
   if (error) return <div className="p-6 text-sm text-red-600">Failed to load data. <button className="underline" onClick={() => window.location.reload()}>Retry</button></div>
-  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" /></div>
+  if (!meals) return <div className="p-6 flex items-center justify-center text-slate-500"><div className="w-8 h-8 border-2 border-slate-300 border-t-plum-500 rounded-full animate-spin" /></div>
   if (!meals.length) return <div className="p-6 text-sm text-slate-500">No data yet — link WhatsApp or upload CSV.</div>
 
 
@@ -238,8 +242,8 @@ export default function WhatWorks() {
       key:   'chia',
       label: 'Chia Seeds',
       icon:  '🌱',
-      color: '#3B82F6',
-      light: '#EFF6FF',
+      color: '#8B5CF6',
+      light: '#EDE9FE',
       mechanism: 'Forms a viscous gel in the stomach that physically slows glucose absorption. Also delays time-to-peak by ~15 min, giving insulin more time to respond.',
       effect: 'Reduces avg peak by ~6 mg/dL and lowers spike rate from 100% to 37.5% in meals with carbs.',
       withStats: { spikeRate: Math.round(chiaWith.spikeRate) || 37, avgPeak: chiaWith.avgPeak || 138 },
@@ -263,7 +267,7 @@ export default function WhatWorks() {
       label: 'Protein Pairing',
       icon:  '🥚',
       color: '#8B5CF6',
-      light: '#F5F3FF',
+      light: '#EDE9FE',
       mechanism: 'Protein eaten alongside or before carbs stimulates GLP-1 and GIP secretion, slowing gastric emptying and enhancing insulin release before glucose peaks.',
       effect: 'Chenna payesh (sweet) + chicken roll: peak 135 with no spike. Protein co-ingestion consistently blunts sweet food responses.',
       withStats: { spikeRate: 36, avgPeak: 138 },
@@ -305,22 +309,22 @@ export default function WhatWorks() {
     <div>
 
       {/* Hero banner */}
-      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-5 mb-6 text-white">
+      <div className="bg-plum-700 rounded-2xl p-5 mb-6 text-white">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-emerald-200 text-xs font-semibold uppercase tracking-wider mb-1">Key Finding</p>
+            <p className="text-plum-200 text-xs font-semibold uppercase tracking-wider mb-1">Key Finding</p>
             <h2 className="text-xl font-bold mb-1.5">Strategy beats food choice</h2>
-            <p className="text-emerald-100 text-sm leading-relaxed max-w-md">
+            <p className="text-plum-100 text-sm leading-relaxed max-w-md">
               White rice (GI 73) peaked at <strong>170 mg/dL without strategies</strong> and only <strong>135 mg/dL with chia + walk</strong> — same food, 35 mg/dL difference. Every zero-strategy meal spiked.
             </p>
           </div>
           <div className="flex-shrink-0 text-center bg-white/10 rounded-xl px-5 py-3">
             <div className="text-3xl font-extrabold">100%</div>
-            <div className="text-emerald-200 text-[11px] mt-0.5">zero-strategy<br/>spike rate</div>
+            <div className="text-plum-200 text-[11px] mt-0.5">zero-strategy<br/>spike rate</div>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-emerald-500/40">
+        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-plum-600/60">
           {[
             { label: 'Spike rate with walk', value: '33%', sub: 'vs 63% without' },
             { label: 'Spike rate with chia', value: '38%', sub: 'vs 100% without' },
@@ -328,8 +332,8 @@ export default function WhatWorks() {
           ].map((s, i) => (
             <div key={i} className="text-center">
               <div className="text-xl font-bold">{s.value}</div>
-              <div className="text-emerald-200 text-[10px] mt-0.5 leading-tight">{s.label}</div>
-              <div className="text-emerald-300 text-[10px]">{s.sub}</div>
+              <div className="text-plum-200 text-[10px] mt-0.5 leading-tight">{s.label}</div>
+              <div className="text-plum-200 text-[10px]">{s.sub}</div>
             </div>
           ))}
         </div>
@@ -366,8 +370,8 @@ export default function WhatWorks() {
                 <ComparisonCard meal={comp.after}  side="With strategies" />
               </div>
 
-              <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-2.5">
-                <p className="text-xs text-blue-800">
+              <div className="bg-plum-100 border border-plum-200 rounded-lg px-4 py-2.5">
+                <p className="text-xs text-plum-800">
                   <span className="font-semibold">Takeaway: </span>{comp.insight}
                 </p>
               </div>
@@ -404,7 +408,7 @@ export default function WhatWorks() {
             icon: '⏱️',
             title: 'Timing is everything',
             body: 'Chia seeds must be taken 10–15 min before eating to form a gel. Post-meal walks must start within 30 min of eating — after 45 min the glucose peak has already occurred and the walk only aids recovery, not prevention.',
-            color: '#3B82F6',
+            color: '#8B5CF6',
           },
           {
             icon: '📐',
