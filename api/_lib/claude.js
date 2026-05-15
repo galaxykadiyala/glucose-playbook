@@ -16,11 +16,15 @@ const SYSTEM_FOOD = {
   type: 'text',
   text: `You are a food logging assistant for a CGM app. Parse food descriptions and return only valid JSON.
 
-Schema: {"food_items": "comma-separated list of foods", "notes": "portion size or prep method, or null"}
+Schema: {"food_items": "comma-separated list of foods", "notes": "portion size or prep method, or null", "meal_type": "breakfast | lunch | dinner | snack, or null if the user did not say"}
+
+Only set meal_type when the user explicitly names the meal ("for lunch", "had breakfast", "evening snack", "dinner was…"). Map "evening snack" / "afternoon snack" / "late night snack" → "snack". If unstated, return null — the server infers from the clock.
 
 Examples:
-- "had oatmeal with banana" → {"food_items": "oatmeal, banana", "notes": null}
-- "2 slices whole wheat toast with peanut butter" → {"food_items": "whole wheat toast, peanut butter", "notes": "2 slices"}`,
+- "had oatmeal with banana" → {"food_items": "oatmeal, banana", "notes": null, "meal_type": null}
+- "for lunch had rice and dal" → {"food_items": "rice, dal", "notes": null, "meal_type": "lunch"}
+- "evening snack: 2 biscuits" → {"food_items": "biscuits", "notes": "2", "meal_type": "snack"}
+- "2 slices whole wheat toast with peanut butter" → {"food_items": "whole wheat toast, peanut butter", "notes": "2 slices", "meal_type": null}`,
   cache_control: { type: 'ephemeral' },
 }
 

@@ -6,6 +6,19 @@ import { downloadTwilioMedia } from '../_lib/media.js'
 const LINK_CODE_RE = /^[A-Z0-9]{6}$/i
 const GLUCOSE_PATTERN = /\b(?:glucose|blood sugar|sugar|bs|bg)\s*[:\s]\s*(\d{2,3})\b/i
 const FOOD_KEYWORDS = /\b(?:ate|had|eat|meal|food|drink|drank|breakfast|lunch|dinner|snack|coffee|tea)\b/i
+const VALID_MEAL_TYPES = new Set(['breakfast', 'lunch', 'dinner', 'snack'])
+const USER_TZ = process.env.USER_TZ || 'Asia/Kolkata'
+
+function inferMealType(timestamp, tz = USER_TZ) {
+  const hourStr = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz, hour: '2-digit', hour12: false,
+  }).formatToParts(new Date(timestamp)).find(p => p.type === 'hour').value
+  const h = parseInt(hourStr, 10) % 24
+  if (h >= 5  && h < 11) return 'breakfast'
+  if (h >= 11 && h < 15) return 'lunch'
+  if (h >= 18 && h < 22) return 'dinner'
+  return 'snack'
+}
 
 function maskNumber(n) {
   if (!n) return n
@@ -89,10 +102,14 @@ async function handleLinkCode(code, whatsappNumber) {
 
 async function logFood(userId, parsed) {
   if (!parsed?.food_items) return { ok: false, reason: 'no_food' }
+  const timestamp = new Date().toISOString()
+  const explicit = typeof parsed.meal_type === 'string' ? parsed.meal_type.toLowerCase() : null
+  const mealType = VALID_MEAL_TYPES.has(explicit) ? explicit : inferMealType(timestamp)
   const { error } = await supabase.from('meal_logs').insert({
     user_id: userId,
-    timestamp: new Date().toISOString(),
+    timestamp,
     food_items: parsed.food_items,
+    meal_type: mealType,
     notes: parsed.notes ?? null,
     source: 'whatsapp',
   })
