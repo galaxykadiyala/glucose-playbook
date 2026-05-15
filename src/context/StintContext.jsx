@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useMemo } from 'react'
 import { useUser } from './UserContext'
-import { getStints, getAllReadings, getMealLogs } from '../lib/dataService'
+import { getStints, getAllReadings, getMealLogs, getManualGlucose } from '../lib/dataService'
 import { buildMealsFromRows } from '../lib/mealAdapter'
 import { supabase } from '../lib/supabase'
 
@@ -56,13 +56,17 @@ export function StintProvider({ children }) {
       getStints(user.id),
       getMealLogs(user.id),
       getAllReadings(user.id),
+      getManualGlucose(user.id),
     ])
-      .then(([stintData, mealRows, readings]) => {
+      .then(([stintData, mealRows, readings, manualReadings]) => {
         if (cancelled) return
         setStints(stintData)
         setAllMealRows(mealRows)
-        setAllReadings(readings)
+        const merged = [...readings, ...manualReadings]
+          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+        setAllReadings(merged)
         const all = new Set(mealRows.map(r => monthKeyFromDate(r.timestamp)))
+        for (const r of manualReadings) all.add(monthKeyFromDate(r.timestamp))
         for (const s of stintData) {
           for (const k of expandRangeMonths(s.start_date, s.end_date)) all.add(k)
         }
